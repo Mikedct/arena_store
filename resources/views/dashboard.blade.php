@@ -70,11 +70,5 @@
             @endforeach
         </tbody>
     </table>
-
-=======
-    <h2>Selamat Datang, {{ session('admin')->firstName }}</h2>
-    <p><a href="{{ url('/game-view') }}">Game View</a></p>
-    <p><a href="{{ url('/logout') }}">Logout</a></p>
->>>>>>> f0f8dc2677687cf37ba41c9f6c4a9f6b2fd45b49
 </body>
 </html>
