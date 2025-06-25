@@ -25,7 +25,7 @@ class LoginController extends Controller
 
         if ($admin && md5($request->password, $admin->password)) {
             Session::put('admin', $admin);
-            return redirect('/')->with('success', 'Login berhasil!');
+            return redirect('/dashboard')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors(['login' => 'Username atau password salah.']);

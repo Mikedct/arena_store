@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Admin;
 
 class AuthController extends Controller
 {
@@ -20,13 +20,13 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $admin = Admin::where('username', $request->username)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$admin || md5($request->password, $admin->password)) {
             return back()->withErrors(['login' => 'Username atau password salah.']);
         }
 
-        Auth::login($user);
+        Auth::login($admin);
         return redirect('/dashboard');
     }
 
