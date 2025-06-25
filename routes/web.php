@@ -16,7 +16,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     if (!session()->has('admin')) {
         return redirect('/login');
     }
