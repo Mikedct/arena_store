@@ -1,11 +1,14 @@
 <?php
+use App\Http\Controllers\GameViewController;
 
-use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return 'Homepage berhasil!';
+Route::get('/db-check', function () {
+    try {
+        \DB::connection()->getPdo();
+        return "✅ Koneksi berhasil ke database: " . \DB::connection()->getDatabaseName();
+    } catch (\Exception $e) {
+        return "❌ Gagal konek DB: " . $e->getMessage();
+    }
 });
 
-Route::get('/game', function () {
-    return view('game');
-});
+Route::get('/game-view', [GameViewController::class, 'index']);
+?>
