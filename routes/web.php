@@ -4,13 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 
-Route::get('/', function () {
-    return 'Homepage berhasil!';
-});
+Route::get('/login', fn() => view('auth.login'));
+Route::get('/register', fn() => view('auth.register'));
+Route::get('/dashboard', fn() => view('dashboard'));
 
-Route::get('/game', function () {
-    return view('game');
-});
+Route::get('/games', [GameController::class, 'index']);
+Route::get('/games/{id}', [GameController::class, 'show']);
+
+Route::get('/order', [OrderController::class, 'show']);
+Route::post('/payment', [PaymentController::class, 'show']);
+Route::post('/payment/process', [PaymentController::class, 'process']);
+
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
