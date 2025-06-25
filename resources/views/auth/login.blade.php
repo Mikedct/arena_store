@@ -6,7 +6,7 @@
     <style>
         body {
             background-color: #000000;
-            color: #f9f871;
+            color: #5b63b7;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -18,7 +18,7 @@
             background-color: #111;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #f9f871;
+            box-shadow: 0 0 10px #5b63b7;
             width: 300px;
         }
         input[type="text"],
@@ -26,21 +26,21 @@
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #f9f871;
+            border: 1px solid #5b63b7;
             background-color: #000;
-            color: #f9f871;
+            color: #5b63b7;
         }
         button {
             width: 100%;
             padding: 10px;
-            background-color: #f9f871;
+            background-color: #5b63b7;
             border: none;
             color: #000;
             font-weight: bold;
             cursor: pointer;
         }
         a {
-            color: #f9f871;
+            color: #5b63b7;
             text-decoration: underline;
         }
     </style>
