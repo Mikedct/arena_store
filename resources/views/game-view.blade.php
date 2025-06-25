@@ -59,7 +59,7 @@
                         @if($game->price == 0)
                             Free
                         @else
-                            Rp{{ number_format($game->price, 0, ',', '.') }}
+                            ${{ number_format($game->price, 0, ',', '.') }}
                         @endif
                     </td>
                     <td>{{ $game->releaseDate }}</td>
