@@ -3,6 +3,7 @@ use App\Http\Controllers\GameViewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/login', fn() => view('auth.login'));
 Route::get('/register', fn() => view('auth.register'));
@@ -32,4 +33,6 @@ Route::get('/register', [RegisterController::class, 'showForm'])->name('register
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/game-view', [GameViewController::class, 'index']);
+
+Route::get('/dashboard1', [DashboardController::class, 'index']);
 ?>
