@@ -31,3 +31,5 @@ Route::post('payments', [PaymentController::class, 'store']);
 // ====== REVIEWS ======
 Route::get('games/{id}/reviews', [ReviewController::class, 'index']);
 Route::post('games/{id}/reviews', [ReviewController::class, 'store']);
+
+

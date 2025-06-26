@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Game;
 // HOME / LANDING PAGE
 Route::get('/', function () {
     return view('welcome'); // atau halaman home custom
@@ -21,6 +21,11 @@ Route::get('/user/dashboard', function () {
     return view('user.dashboard');
 });
 
+Route::get('/game', function () {
+    $game = Game::all();
+    return view('user.game', compact('game'));
+});
+
 // DASHBOARD ADMIN
 Route::get('/admin/login', function () {
     return view('auth.login'); // bisa pakai login yang sama
@@ -30,12 +35,7 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
 
-// GAME PAGE USER
-Route::get('/games', function () {
-    return view('user.games');
-});
-
-Route::get('/games/{id}', function ($id) {
+Route::get('/game/{id}', function ($id) {
     return view('user.game-detail', ['id' => $id]);
 });
 

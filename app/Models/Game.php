@@ -7,17 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    use HasFactory;
-
-    protected $primaryKey = 'gameID';
+    protected $primaryKey = 'gameID'; // Kalau primary key bukan id
     public $incrementing = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'gameCode', 'title', 'genre', 'platform', 'price',
-        'releaseDate', 'developer', 'publisher', 'description',
-        'image', 'adminID'
+        'gameCode', 'title', 'genre', 'platform',
+        'price', 'releaseDate', 'developer', 'publisher',
+        'description', 'image', 'adminID'
     ];
-
+    
     public function admin()
     {
         return $this->belongsTo(Admin::class, 'adminID');

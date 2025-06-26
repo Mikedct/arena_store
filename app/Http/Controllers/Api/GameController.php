@@ -10,8 +10,10 @@ class GameController extends Controller
 {
     public function index()
     {
-        return response()->json(Game::all());
+        $game = Game::all();
+        return view('user.game', compact('game'));
     }
+
 
     public function show($id)
     {
