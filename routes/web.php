@@ -10,7 +10,6 @@ Route::get('/', function () {
     if (!session()->has('user')) {
         return redirect('/login');
     }
-
     return view('user.dashboard');
 });
 

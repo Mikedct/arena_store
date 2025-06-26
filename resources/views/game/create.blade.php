@@ -59,6 +59,7 @@
 
     <form method="POST" action="{{ route('game.store') }}" enctype="multipart/form-data">
         @csrf
+        
         <label>Kode Game</label>
         <input type="text" name="gameCode" required>
 

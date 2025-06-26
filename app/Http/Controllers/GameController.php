@@ -44,7 +44,7 @@ class GameController extends Controller
         }
 
         // Kirim ke API
-        $response = Http::post('http://localhost/game_store/game_store/game.php', $data, );
+        $response = Http::asJson()->post('http://localhost/game_store/game_store/game.php', $data);
 
         if ($response->successful()) {
             return redirect('/admin/dashboard')->with('success', 'Game berhasil ditambahkan!');
