@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use illuminate\Support\Str;
 
 class GameController extends Controller
 {
@@ -24,11 +25,26 @@ class GameController extends Controller
             'developer' => 'required|string',
             'publisher' => 'required|string',
             'description' => 'required|string',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'adminID' => 'required|integer',
         ]);
 
+        if ($request->hasFile('image')) {
+            $originalName = $request->file('image')->getClientOriginalName();
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $extension;
+
+            $request->file('image')->move(public_path('images/games'), $filename);
+
+            // Tambahkan nama file ke data yang akan dikirim ke API
+            $data['image'] = $filename;
+        } else {
+            // Jika tidak upload gambar, tetap isi kosong atau default
+            $data['image'] = null;
+        }
+
         // Kirim ke API
-        $response = Http::post('http://localhost/game_store/game_store/game.php', $data);
+        $response = Http::post('http://localhost/game_store/game_store/game.php', $data, );
 
         if ($response->successful()) {
             return redirect('/dashboard1')->with('success', 'Game berhasil ditambahkan!');
