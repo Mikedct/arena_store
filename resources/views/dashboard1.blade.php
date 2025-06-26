@@ -48,6 +48,8 @@
                 <p><span class="label">Developer:</span> {{ $game['developer'] }}</p>
                 <p><span class="label">Publisher:</span> {{ $game['publisher'] }}</p>
                 <p><span class="label">Description:</span> {{ $game['description'] }}</p>
+                <p><a href="{{ route('game.edit', $game['gameID']) }}">Edit</a></p>
+
             </div>
         @endforeach
     @endif

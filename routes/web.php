@@ -39,4 +39,7 @@ Route::get('/dashboard1', [DashboardController::class, 'index']);
 
 Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
 Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
+
+Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
+Route::put('/game/{id}/update', [GameController::class, 'update'])->name('game.update');
 ?>
