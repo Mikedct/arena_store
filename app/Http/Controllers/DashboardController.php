@@ -16,6 +16,6 @@ class DashboardController extends Controller
             $games = [];
         }
 
-        return view('dashboard1', compact('games'));
+        return view('admin. dashboard', compact('games'));
     }
 }

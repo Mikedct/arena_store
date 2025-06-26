@@ -15,9 +15,7 @@ Route::get('/', function () {
 });
 
 // Admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-});
+Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 
 
 //User
