@@ -6,6 +6,23 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GameController;
 
+Route::get('/', function () {
+    if (!session()->has('user')) {
+        return redirect('/login');
+    }
+
+    return view('dashboard');
+});
+
+// Admin
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+});
+
+
+//User
+
+
 Route::get('/login', fn() => view('auth.login'));
 Route::get('/register', fn() => view('auth.register'));
 Route::get('/dashboard', fn() => view('dashboard'));
@@ -22,20 +39,13 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::get('/', function () {
-    if (!session()->has('admin')) {
-        return redirect('/login');
-    }
 
-    return view('dashboard');
-});
 
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/game-view', [GameViewController::class, 'index']);
 
-Route::get('/dashboard1', [DashboardController::class, 'index']);
 
 Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
 Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
