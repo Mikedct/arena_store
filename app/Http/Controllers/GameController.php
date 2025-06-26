@@ -83,10 +83,25 @@ class GameController extends Controller
             'developer' => 'required|string',
             'publisher' => 'required|string',
             'description' => 'required|string',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'adminID' => 'required|integer',
         ]);
 
         $data['gameID'] = (int) $id;
+
+        if ($request->hasFile('image')) {
+            $originalName = $request->file('image')->getClientOriginalName();
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $extension;
+
+            $request->file('image')->move(public_path('images/games'), $filename);
+
+            // Tambahkan nama file ke data yang akan dikirim ke API
+            $data['image'] = $filename;
+        } else {
+            // Jika tidak upload gambar, tetap isi kosong atau default
+            $data['image'] = null;
+        }
 
         // Kirim ke game.php via PUT (asForm → x-www-form-urlencoded)
         $response = Http::withHeaders([

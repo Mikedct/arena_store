@@ -19,7 +19,7 @@
         <div class="error">{{ $errors->first() }}</div>
     @endif
 
-    <form method="POST" action="{{ route('game.update', $game['gameID']) }}">
+    <form method="POST" action="{{ route('game.update', $game['gameID']) }}" enctype="multipart/form-data" >
         @csrf
         @method('PUT')
 
@@ -49,6 +49,9 @@
 
         <label>Deskripsi</label>
         <textarea name="description" rows="5" required>{{ $game['description'] }}</textarea>
+
+        <label for="image">Gambar</label>
+        <input type="file" name="image" accept="image/*">
 
         <label>Admin ID</label>
         <input type="number" name="adminID" value="{{ $game['adminID'] }}" required>
