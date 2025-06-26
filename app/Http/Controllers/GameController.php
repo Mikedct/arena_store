@@ -84,4 +84,22 @@ class GameController extends Controller
 
         return back()->withErrors(['message' => 'Gagal memperbarui game.']);
     }
+
+    public function destroy($id)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->send('DELETE', 'http://localhost/game_store/game_store/game.php', [
+                    'json' => [
+                        'gameID' => $id,
+                    ]
+                ]);
+
+        if ($response->successful()) {
+            return redirect('/dashboard1')->with('success', 'Game berhasil dihapus.');
+        }
+
+        return back()->withErrors(['message' => 'Gagal menghapus game.']);
+    }
 }

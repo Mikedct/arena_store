@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Game Dashboard</title>
     <style>
@@ -8,25 +9,30 @@
             margin: 40px;
             background: #f7f7f7;
         }
+
         h1 {
             text-align: center;
         }
+
         .game {
             background: #fff;
             padding: 20px;
             margin: 15px auto;
             border-radius: 10px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
             width: 80%;
         }
+
         .game h2 {
             margin-top: 0;
         }
+
         .label {
             font-weight: bold;
         }
     </style>
 </head>
+
 <body>
 
     <h1>Game Store Dashboard</h1>
@@ -50,17 +56,25 @@
                 <p><span class="label">Publisher:</span> {{ $game['publisher'] }}</p>
                 <p><span class="label">Description:</span> {{ $game['description'] }}</p>
                 <p><a href="{{ route('game.edit', $game['gameID']) }}">Edit</a></p>
+                <form action="{{ route('game.destroy', $game['gameID']) }}" method="POST"
+                    onsubmit="return confirm('Yakin ingin menghapus game ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Hapus</button>
+                </form>
 
             </div>
         @endforeach
     @endif
 
 </body>
+
 </html>
 
 {{-- Helper: check if array is associative --}}
 @php
-    function is_assoc(array $arr) {
+    function is_assoc(array $arr)
+    {
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 @endphp

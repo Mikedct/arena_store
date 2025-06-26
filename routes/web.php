@@ -42,4 +42,6 @@ Route::post('/game/store', [GameController::class, 'store'])->name('game.store')
 
 Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
 Route::put('/game/{id}/update', [GameController::class, 'update'])->name('game.update');
+
+Route::delete('/game/{id}', [GameController::class, 'destroy'])->name('game.destroy');
 ?>
