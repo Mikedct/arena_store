@@ -30,6 +30,7 @@
 <body>
 
     <h1>Game Store Dashboard</h1>
+    <p style="text-align: center;">Tambah Game Baru <a href="{{ url('/game/create') }}">Add</a></p>
 
     @if (empty($games))
         <p style="text-align: center; color: red;">Tidak ada data ditemukan.</p>
