@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $primaryKey = 'gameID'; // Kalau primary key bukan id
-    public $incrementing = true;
-    public $timestamps = false;
+    protected $table = 'game'; // 🟡 Sesuaikan dengan nama tabel di MySQL (case-sensitive)
+    protected $primaryKey = 'gameID'; // 🟡 Primary key kamu
+    public $timestamps = false; // 🟡 Karena tidak ada created_at / updated_at
 
     protected $fillable = [
         'gameCode', 'title', 'genre', 'platform',

@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    protected $table = 'user';
     protected $primaryKey = 'userID';
-    public $incrementing = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'firstName', 'lastName', 'username', 'email',
-        'dateOfBirth', 'phoneNumber', 'password', 'api_token'
+        'firstName', 'lastName', 'username',
+        'email', 'dateOfBirth', 'phoneNumber', 'password'
     ];
-
-    protected $hidden = ['password', 'api_token'];
 }
