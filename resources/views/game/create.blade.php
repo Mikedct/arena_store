@@ -57,7 +57,7 @@
         <div class="error">{{ $errors->first() }}</div>
     @endif
 
-    <form method="POST" action="{{ route('game.store') }}">
+    <form method="POST" action="{{ route('game.store') }}" enctype="multipart/form-data">
         @csrf
         <label>Kode Game</label>
         <input type="text" name="gameCode" required>
@@ -85,6 +85,9 @@
 
         <label>Deskripsi</label>
         <textarea name="description" rows="5" required></textarea>
+
+        <label for="image">Gambar</label>
+        <input type="file" name="image" accept="image/*">
 
         <label>Admin ID</label>
         <input type="number" name="adminID" required>
