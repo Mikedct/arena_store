@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GameController;
 
 Route::get('/login', fn() => view('auth.login'));
 Route::get('/register', fn() => view('auth.register'));
@@ -35,4 +36,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/game-view', [GameViewController::class, 'index']);
 
 Route::get('/dashboard1', [DashboardController::class, 'index']);
+
+Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
+Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
 ?>
