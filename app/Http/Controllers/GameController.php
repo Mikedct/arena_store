@@ -47,7 +47,7 @@ class GameController extends Controller
         $response = Http::post('http://localhost/game_store/game_store/game.php', $data, );
 
         if ($response->successful()) {
-            return redirect('/dashboard1')->with('success', 'Game berhasil ditambahkan!');
+            return redirect('/admin/dashboard')->with('success', 'Game berhasil ditambahkan!');
         } else {
             return back()->withErrors(['message' => 'Gagal menambahkan game.']);
         }
@@ -68,7 +68,7 @@ class GameController extends Controller
             return view('game.edit', compact('game'));
         }
 
-        return redirect('/dashboard1')->withErrors(['message' => 'Gagal memuat data game.']);
+        return redirect('/admin/dashboard')->withErrors(['message' => 'Gagal memuat data game.']);
     }
 
     public function update(Request $request, $id)
@@ -110,7 +110,7 @@ class GameController extends Controller
         ])->put('http://localhost/game_store/game_store/game.php', $data);
 
         if ($response->successful()) {
-            return redirect('/dashboard1')->with('success', 'Game berhasil diperbarui!');
+            return redirect('/admin/dashboard')->with('success', 'Game berhasil diperbarui!');
         }
 
         return back()->withErrors(['message' => 'Gagal memperbarui game.']);
@@ -128,7 +128,7 @@ class GameController extends Controller
                 ]);
 
         if ($response->successful()) {
-            return redirect('/dashboard1')->with('success', 'Game berhasil dihapus.');
+            return redirect('/admin/dashboard')->with('success', 'Game berhasil dihapus.');
         }
 
         return back()->withErrors(['message' => 'Gagal menghapus game.']);

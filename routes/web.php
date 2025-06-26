@@ -11,7 +11,7 @@ Route::get('/', function () {
         return redirect('/login');
     }
 
-    return view('dashboard');
+    return view('user.dashboard');
 });
 
 // Admin
@@ -33,16 +33,16 @@ Route::get('/dashboard', fn() => view('dashboard'));
 // Route::post('/payment/process', [PaymentController::class, 'process']);
 
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::get('/logout', [LoginController::class, 'logout']);
+// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+// Route::post('/login', [LoginController::class, 'login']);
+// Route::get('/logout', [LoginController::class, 'logout']);
 
 
 
-Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+// Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
+// Route::post('/register', [RegisterController::class, 'register']);
 
-Route::get('/game-view', [GameViewController::class, 'index']);
+// Route::get('/game-view', [GameViewController::class, 'index']);
 
 
 Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
