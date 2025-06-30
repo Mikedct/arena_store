@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     if (!session()->has('user')) {
@@ -16,6 +17,9 @@ Route::get('/', function () {
 
 // Admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+Route::get('/user/detail/{id}', [UserController::class, 'show'])->name('user.user-detail');
+
 
 Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
 Route::post('/game/store', [GameController::class, 'store'])->name('game.store');

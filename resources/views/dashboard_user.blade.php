@@ -1,13 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Game Store - User Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Game Store - Dashboard User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        :root {
+            --primary: #2d3748;
+            --secondary: #4a5568;
+            --accent: #4299e1;
+            --bg: #f7fafc;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', sans-serif;
-            margin: 40px;
-            background-color: #f2f2f2;
+            background-color: var(--bg);
+            color: var(--primary);
+            padding: 30px;
         }
 
         h1 {
@@ -15,118 +32,125 @@
             margin-bottom: 30px;
         }
 
-        form {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            display: flex;
-            gap: 10px;
+        form.search-form {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            width: 300px;
             border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        button {
-            padding: 10px 20px;
-            background: #2d3748;
+        button[type="submit"] {
+            padding: 8px 14px;
+            background-color: var(--accent);
             color: white;
             border: none;
             border-radius: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
         }
 
         .game-card {
-            background: white;
+            background-color: var(--white);
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
+            transition: transform 0.2s ease;
         }
 
-        .game-card img {
-            width: 120px;
-            height: auto;
-            border-radius: 8px;
-            object-fit: cover;
+        .game-card:hover {
+            transform: translateY(-3px);
         }
 
-        .game-info {
-            flex: 1;
-        }
-
-        .game-info h2 {
-            margin: 0 0 10px;
-            color: #2d3748;
+        .game-card h2 {
+            color: var(--accent);
+            margin-bottom: 10px;
         }
 
         .game-info p {
-            margin: 5px 0;
+            margin: 6px 0;
         }
 
         .label {
             font-weight: bold;
         }
 
-        .no-data {
+        .empty-message {
             text-align: center;
-            color: #888;
+            color: red;
+        }
+
+        a.title-link {
+            text-decoration: none;
+            color: var(--accent);
+        }
+
+        a.title-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Game Store - Daftar Game</h1>
+    <h1>🎮 Game Store - Dashboard Pengguna</h1>
 
-    <form method="GET" action="{{ url('/user/dashboard') }}">
-        <input type="text" name="search" value="{{ request('search') }}"
-            placeholder="Cari judul, genre, atau platform...">
-        <button type="submit">Cari</button>
+    <form class="search-form" method="GET" action="{{ url('/user/dashboard') }}">
+        <input type="text" name="search" placeholder="Cari berdasarkan judul, genre, platform..." value="{{ request('search') }}">
+        <button type="submit">🔍 Cari</button>
     </form>
 
     @if (empty($games))
-        <p class="no-data">Tidak ada data game ditemukan.</p>
+        <p class="empty-message">Tidak ada data ditemukan.</p>
     @else
         @php
             $games = is_assoc($games) ? [$games] : $games;
         @endphp
 
-        @foreach ($games as $game)
-            <div class="game-card">
-                @if (!empty($game['image']))
-                    <img src="{{ asset('images/games/' . $game['image']) }}" alt="{{ $game['title'] }}">
-                @else
-                    <img src="{{ asset('images/games/default.png') }}" alt="Default Image">
-                @endif
+        <div class="grid">
+            @foreach ($games as $game)
+                <div class="game-card">
+                    @if (!empty($game['image']))
+                        <div style="text-align: center;">
+                            <img src="{{ asset('images/games/' . $game['image']) }}"
+                                 alt="{{ $game['title'] }}"
+                                 style="width: 300px; height: 400px; object-fit: cover; border-radius: 8px;">
+                        </div>
+                    @endif
 
-                <div class="game-info">
                     <h2>
-                        <a href="{{ url('/user/game-detail/' . $game['gameID']) }}" style="text-decoration: none; color:rgb(47, 41, 214);">
+                        <a class="title-link" href="{{ url('/user/game-detail/' . $game['gameID']) }}">
                             {{ $game['title'] }} ({{ $game['gameCode'] }})
                         </a>
                     </h2>
-                    <p><span class="label">Genre:</span> {{ $game['genre'] }}</p>
-                    <p><span class="label">Platform:</span> {{ $game['platform'] }}</p>
-                    <p><span class="label">Harga:</span> ${{ $game['price'] }}</p>
-                    <p><span class="label">Rilis:</span> {{ $game['releaseDate'] }}</p>
-                    <p><span class="label">Developer:</span> {{ $game['developer'] }}</p>
-                    <p><span class="label">Publisher:</span> {{ $game['publisher'] }}</p>
-                    <p><span class="label">Deskripsi:</span> {{ $game['description'] }}</p>
+                    <div class="game-info">
+                        <p><span class="label">Genre:</span> {{ $game['genre'] }}</p>
+                        <p><span class="label">Platform:</span> {{ $game['platform'] }}</p>
+                        <p><span class="label">Price:</span> ${{ $game['price'] }}</p>
+                        <p><span class="label">Release Date:</span> {{ $game['releaseDate'] }}</p>
+                        <p><span class="label">Developer:</span> {{ $game['developer'] }}</p>
+                        <p><span class="label">Publisher:</span> {{ $game['publisher'] }}</p>
+                        <p><span class="label">Description:</span> {{ Str::limit($game['description'], 120) }}</p>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     @endif
 
 </body>
 
 </html>
 
-{{-- Helper --}}
 @php
     function is_assoc(array $arr)
     {
