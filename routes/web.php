@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\UserGameController;
 
 Route::get('/', function () {
     if (!session()->has('user')) {
@@ -25,42 +26,8 @@ Route::get('/login', fn() => view('auth.login'));
 Route::get('/register', fn() => view('auth.register'));
 Route::get('/dashboard', fn() => view('dashboard'));
 
-Route::get('/user/dashboard', function (\Illuminate\Http\Request $request) {
-    $query = $request->query('search');
-    $games = [];
-
-    if ($query) {
-        // Coba filter berdasarkan title, genre, atau platform
-        $responseTitle = Http::get("http://localhost/game_store/game_store/game.php?title=$query");
-        $responseGenre = Http::get("http://localhost/game_store/game_store/game.php?genre=$query");
-        $responsePlatform = Http::get("http://localhost/game_store/game_store/game.php?platform=$query");
-
-        $allResults = array_merge(
-            $responseTitle->successful() ? $responseTitle->json() : [],
-            $responseGenre->successful() ? $responseGenre->json() : [],
-            $responsePlatform->successful() ? $responsePlatform->json() : []
-        );
-
-        // Hapus duplikat berdasarkan gameID
-        $games = collect($allResults)->unique('gameID')->values()->all();
-    } else {
-        $response = Http::get("http://localhost/game_store/game_store/game.php");
-        $games = $response->successful() ? $response->json() : [];
-    }
-
-    return view('dashboard_user', compact('games'));
-});
-
-Route::get('/user/game-detail/{id}', function ($id) {
-    $response = Http::get("http://localhost/game_store/game_store/game.php?gameID=$id");
-
-    if ($response->successful() && !empty($response->json())) {
-        $game = $response->json()[0]; // karena API mengembalikan array
-        return view('user.game-detail', compact('game'));
-    }
-
-    return abort(404, 'Game tidak ditemukan');
-});
+Route::get('/user/dashboard', [UserGameController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/user/game-detail/{id}', [UserGameController::class, 'show'])->name('user.game-detail');
 
 // Route::get('/games', [GameController::class, 'index']);
 // Route::get('/games/{id}', [GameController::class, 'show']);
