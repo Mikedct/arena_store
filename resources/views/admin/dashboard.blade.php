@@ -139,8 +139,9 @@
                     @if (!empty($game['image']))
                         <div style="text-align: center;">
                             <img src="{{ asset('images/games/' . $game['image']) }}" alt="{{ $game['title'] }}"
-                                style="max-width: 100%; height: auto; border-radius: 8px;">
+                                style="width: 300px; height: 400px; object-fit: cover; border-radius: 8px;">
                         </div>
+
                     @endif
                     <h2>{{ $game['title'] }} ({{ $game['gameCode'] }})</h2>
                     <div class="game-info">

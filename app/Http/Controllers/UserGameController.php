@@ -13,9 +13,9 @@ class UserGameController extends Controller
         $games = [];
 
         if ($query) {
-            $responseTitle = Http::get("http://localhost/game_store/game_store/game.php?title=$query");
-            $responseGenre = Http::get("http://localhost/game_store/game_store/game.php?genre=$query");
-            $responsePlatform = Http::get("http://localhost/game_store/game_store/game.php?platform=$query");
+            $responseTitle = Http::get("http://localhost/game_store/game.php?title=$query");
+            $responseGenre = Http::get("http://localhost/game_store/game.php?genre=$query");
+            $responsePlatform = Http::get("http://localhost/game_store/game.php?platform=$query");
 
             $allResults = array_merge(
                 $responseTitle->successful() ? $responseTitle->json() : [],
@@ -25,7 +25,7 @@ class UserGameController extends Controller
 
             $games = collect($allResults)->unique('gameID')->values()->all();
         } else {
-            $response = Http::get("http://localhost/game_store/game_store/game.php");
+            $response = Http::get("http://localhost/game_store/game.php");
             $games = $response->successful() ? $response->json() : [];
         }
 
@@ -34,7 +34,7 @@ class UserGameController extends Controller
 
     public function show($id)
     {
-        $response = Http::get("http://localhost/game_store/game_store/game.php?gameID=$id");
+        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
 
         if ($response->successful() && !empty($response->json())) {
             $game = $response->json()[0];

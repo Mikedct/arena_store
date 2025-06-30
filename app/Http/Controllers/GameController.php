@@ -44,7 +44,7 @@ class GameController extends Controller
         }
 
         // Kirim ke API
-        $response = Http::asJson()->post('http://localhost/game_store/game_store/game.php', $data);
+        $response = Http::asJson()->post('http://localhost/game_store/game.php', $data);
 
         if ($response->successful()) {
             return redirect('/admin/dashboard')->with('success', 'Game berhasil ditambahkan!');
@@ -55,7 +55,7 @@ class GameController extends Controller
 
     public function edit($id)
     {
-        $response = Http::get("http://localhost/game_store/game_store/game.php?gameID=$id");
+        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
 
         if ($response->successful()) {
             $game = $response->json();
@@ -107,7 +107,7 @@ class GameController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->put('http://localhost/game_store/game_store/game.php', $data);
+        ])->put('http://localhost/game_store/game.php', $data);
 
         if ($response->successful()) {
             return redirect('/admin/dashboard')->with('success', 'Game berhasil diperbarui!');
@@ -121,7 +121,7 @@ class GameController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-        ])->send('DELETE', 'http://localhost/game_store/game_store/game.php', [
+        ])->send('DELETE', 'http://localhost/game_store/game.php', [
                     'json' => [
                         'gameID' => $id,
                     ]
