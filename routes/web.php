@@ -16,6 +16,10 @@ Route::get('/', function () {
 // Admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 
+Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
+Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
+
+
 
 //User
 
@@ -42,10 +46,6 @@ Route::get('/dashboard', fn() => view('dashboard'));
 // Route::post('/register', [RegisterController::class, 'register']);
 
 // Route::get('/game-view', [GameViewController::class, 'index']);
-
-
-Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
-Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
 
 Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
 Route::put('/game/{id}/update', [GameController::class, 'update'])->name('game.update');
