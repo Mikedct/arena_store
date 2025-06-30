@@ -1,6 +1,7 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -12,9 +13,9 @@ class DashboardController extends Controller
         $games = [];
 
         if ($query) {
-            $responseTitle = Http::get("http://localhost/game_store/game.php?title=$query");
-            $responseGenre = Http::get("http://localhost/game_store/game.php?genre=$query");
-            $responsePlatform = Http::get("http://localhost/game_store/game.php?platform=$query");
+            $responseTitle = Http::get("http://localhost/Game_Store/game.php?title=$query");
+            $responseGenre = Http::get("http://localhost/Game_Store/game.php?genre=$query");
+            $responsePlatform = Http::get("http://localhost/Game_Store/game.php?platform=$query");
 
             $allResults = array_merge(
                 $responseTitle->successful() ? $responseTitle->json() : [],
@@ -24,11 +25,11 @@ class DashboardController extends Controller
 
             $games = collect($allResults)->unique('gameID')->values()->all();
         } else {
-            $response = Http::get("http://localhost/game_store/game.php");
+            $response = Http::get("http://localhost/Game_Store/game.php");
             $games = $response->successful() ? $response->json() : [];
         }
 
-        return view('dashboard_user', compact('games'));
+        return view('user.dashboard', compact('games'));
     }
 
     public function show($id)
@@ -37,7 +38,7 @@ class DashboardController extends Controller
 
         if ($response->successful() && !empty($response->json())) {
             $game = $response->json()[0];
-            return view('user.game-detail', compact('game'));
+            return view('user.game', compact('game'));
         }
 
         return abort(404, 'Game tidak ditemukan');

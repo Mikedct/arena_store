@@ -3,29 +3,58 @@
 @section('title', 'Game Store Dashboard')
 
 @section('content')
-<div class="container mx-auto py-10">
-    <h1 class="text-3xl font-bold text-center mb-8 text-[#5b63b7]">Game Store Dashboard</h1>
+<div class="container mx-auto px-4 py-10">
+    <h1 class="text-4xl font-bold text-center mb-10 text-[#5b63b7]">Game Store Dashboard</h1>
 
-    @if (empty($games))
-        <p class="text-center text-red-500">Tidak ada data ditemukan.</p>
+    {{-- Form Pencarian --}}
+    <form method="GET" action="{{ url('/user/dashboard') }}" class="mb-10 max-w-2xl mx-auto flex flex-col sm:flex-row gap-4">
+        <input type="text" name="search" value="{{ request('search') }}"
+            placeholder="Cari judul, genre, atau platform..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5b63b7]">
+        <button type="submit" class="bg-[#5b63b7] text-white px-6 py-2 rounded-md hover:bg-[#434bac] transition">
+            Cari
+        </button>
+    </form>
+
+    {{-- Menampilkan Game --}}
+    @if (!is_array($games) || count($games) === 0)
+        <p class="text-center text-red-500 text-lg">Tidak ada data ditemukan.</p>
     @else
         @php
             $games = is_assoc($games) ? [$games] : $games;
         @endphp
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($games as $game)
-                <div class="bg-white rounded-2xl shadow-md p-6 border border-[#5b63b7] hover:shadow-lg transition duration-300">
-                    <h2 class="text-xl font-semibold text-[#000000] mb-2">
-                        {{ $game['title'] }} <span class="text-sm text-gray-500">({{ $game['gameCode'] }})</span>
-                    </h2>
-                    <p><span class="font-semibold">Genre:</span> {{ $game['genre'] }}</p>
-                    <p><span class="font-semibold">Platform:</span> {{ $game['platform'] }}</p>
-                    <p><span class="font-semibold">Price:</span> ${{ $game['price'] }}</p>
-                    <p><span class="font-semibold">Release Date:</span> {{ $game['releaseDate'] }}</p>
-                    <p><span class="font-semibold">Developer:</span> {{ $game['developer'] }}</p>
-                    <p><span class="font-semibold">Publisher:</span> {{ $game['publisher'] }}</p>
-                    <p class="mt-2 text-sm text-gray-600"><span class="font-semibold">Description:</span> {{ $game['description'] }}</p>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-lg transition duration-300">
+                    {{-- Gambar Game --}}
+                    <div class="h-60 bg-gray-100">
+                        <img src="{{ !empty($game['image']) ? asset('images/games/' . $game['image']) : asset('images/games/default.png') }}"
+                             alt="{{ $game['title'] }}"
+                             class="w-full h-full object-cover object-center">
+                    </div>
+
+                    <div class="p-5">
+                        <h2 class="text-lg font-bold text-[#000000] mb-2">
+                            <a href="{{ url('/user/game/' . $game['gameID']) }}" class="text-[#5b63b7] hover:underline">
+                                {{ $game['title'] }}
+                            </a>
+                            <span class="text-sm text-gray-500">({{ $game['gameCode'] }})</span>
+                        </h2>
+
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li><span class="font-medium">Genre:</span> {{ $game['genre'] }}</li>
+                            <li><span class="font-medium">Platform:</span> {{ $game['platform'] }}</li>
+                            <li><span class="font-medium">Harga:</span> ${{ $game['price'] }}</li>
+                            <li><span class="font-medium">Rilis:</span> {{ $game['releaseDate'] }}</li>
+                            <li><span class="font-medium">Developer:</span> {{ $game['developer'] }}</li>
+                            <li><span class="font-medium">Publisher:</span> {{ $game['publisher'] }}</li>
+                        </ul>
+
+                        <p class="mt-3 text-sm text-gray-600">
+                            <span class="font-medium">Deskripsi:</span> {{ \Illuminate\Support\Str::limit($game['description'], 120) }}
+                        </p>
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -34,7 +63,7 @@
 @endsection
 
 @php
-    function is_assoc(array $arr) {
-        return array_keys($arr) !== range(0, count($arr) - 1);
+    function is_assoc($arr) {
+        return is_array($arr) && array_keys($arr) !== range(0, count($arr) - 1);
     }
 @endphp

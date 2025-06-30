@@ -11,15 +11,15 @@
         </a>
     </div>
 
-    <form method="GET" action="{{ url('/admin/dashboard') }}" class="flex gap-3 max-w-xl mb-8">
+    <form method="GET" action="{{ url('/user/dashboard') }}" class="mb-6 max-w-xl mx-auto flex gap-3">
         <input type="text" name="search" value="{{ request('search') }}"
-               placeholder="Cari judul, genre, atau platform..."
-               class="w-full px-4 py-2 rounded border border-gray-300 focus:ring focus:ring-[#5b63b7] focus:outline-none">
-        <button type="submit"
-                class="px-5 py-2 bg-[#5b63b7] text-white rounded hover:bg-[#454da1] transition">
+            placeholder="Cari judul, genre, atau platform..."
+            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5b63b7]">
+        <button type="submit" class="bg-[#5b63b7] text-white px-4 py-2 rounded hover:bg-[#3c4499]">
             Cari
         </button>
     </form>
+
 
     @if (empty($games))
         <p class="text-center text-red-500">Tidak ada data game ditemukan.</p>
@@ -73,8 +73,7 @@
 @endsection
 
 @php
-    function is_assoc(array $arr)
-    {
+    function is_assoc(array $arr) {
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 @endphp
