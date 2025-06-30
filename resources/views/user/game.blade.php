@@ -57,6 +57,7 @@
 <div class="mt-10 max-w-4xl mx-auto bg-gray-50 p-6 rounded-lg border border-gray-200">
     <h3 class="text-xl font-semibold mb-4 text-[#5b63b7]">Tulis Review</h3>
 
+    {{-- Feedback pesan --}}
     @if(session('success'))
         <p class="text-green-600 mb-4">{{ session('success') }}</p>
     @elseif(session('error'))
@@ -65,19 +66,27 @@
 
     <form action="{{ route('user.review.store', $game['gameID']) }}" method="POST" class="space-y-4">
         @csrf
+
+        {{-- Text Review --}}
         <div>
-            <input type="text" name="title" placeholder="Judul Review" class="w-full border rounded p-2" required>
-            @error('title') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-        <div>
-            <textarea name="text" rows="4" placeholder="Tulis review kamu..." class="w-full border rounded p-2" required></textarea>
+            <label for="text" class="block font-semibold mb-1">Review</label>
+            <textarea name="text" id="text" rows="4" placeholder="Tulis review kamu..." class="w-full border rounded p-2" required>{{ old('text') }}</textarea>
             @error('text') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
+
+        {{-- Rating Bintang --}}
         <div>
-            <label class="block font-semibold">Rating (1 - 5):</label>
-            <input type="number" name="rating" min="1" max="5" step="1" class="border rounded p-2 w-24" required>
+            <label class="block font-semibold mb-1">Rating</label>
+            <div id="star-container" class="flex space-x-1 text-2xl cursor-pointer text-gray-400">
+                @for ($i = 1; $i <= 5; $i++)
+                    <span data-value="{{ $i }}">★</span>
+                @endfor
+            </div>
+            <input type="hidden" name="rating" id="rating" value="{{ old('rating', 0) }}">
             @error('rating') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
+
+        {{-- Tombol Submit --}}
         <button type="submit" class="bg-[#5b63b7] text-white px-4 py-2 rounded hover:bg-[#434bac]">
             Kirim Review
         </button>
@@ -115,3 +124,29 @@
 </div>
 
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('#star-container span');
+        const ratingInput = document.getElementById('rating');
+
+        // Jika ada nilai rating lama (misal dari old value)
+        const oldValue = parseInt(ratingInput.value || 0);
+        highlightStars(oldValue);
+
+        stars.forEach((star) => {
+            star.addEventListener('click', () => {
+                const ratingValue = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = ratingValue;
+                highlightStars(ratingValue);
+            });
+        });
+
+        function highlightStars(count) {
+            stars.forEach((s, i) => {
+                s.classList.toggle('text-yellow-400', i < count);
+                s.classList.toggle('text-gray-400', i >= count);
+            });
+        }
+    });
+</script>
