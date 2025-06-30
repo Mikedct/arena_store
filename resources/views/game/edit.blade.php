@@ -53,6 +53,9 @@
         <label for="image">Gambar</label>
         <input type="file" name="image" accept="image/*">
 
+        <label>Link Video</label>
+        <input type="text" name="videolink" value="{{ $game['videolink'] }}" required>
+
         <label>Admin ID</label>
         <input type="number" name="adminID" value="{{ $game['adminID'] }}" required>
 

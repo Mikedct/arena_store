@@ -84,6 +84,7 @@ class GameController extends Controller
             'publisher' => 'required|string',
             'description' => 'required|string',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'videolink' => 'nullable|string',
             'adminID' => 'required|integer',
         ]);
 

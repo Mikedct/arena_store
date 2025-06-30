@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Detail Game</title>
+    <title>{{ $game['title'] }} - Detail Game</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 40px;
-            background-color: #f5f5f5;
+            font-family: sans-serif;
+            padding: 30px;
+            background-color: #f9f9f9;
         }
-
         .container {
             max-width: 800px;
             margin: auto;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 0 10px #ccc;
         }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
+        iframe {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
         }
-
+        .info p {
+            margin: 8px 0;
+        }
         .game-img {
             display: block;
             margin: 0 auto 20px;
@@ -30,28 +33,12 @@
             border-radius: 8px;
             box-shadow: 0 0 6px rgba(0,0,0,0.2);
         }
-
-        .info {
-            margin-bottom: 10px;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #555;
-        }
-
-        a.back-link {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #2d3748;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>{{ $game['title'] }}</h1>
+        <h2>{{ $game['title'] }} ({{ $game['gameCode'] }})</h2>
 
         @if (!empty($game['image']))
             <img src="{{ asset('images/games/' . $game['image']) }}" class="game-img" alt="{{ $game['title'] }}">
@@ -59,16 +46,22 @@
             <img src="{{ asset('images/games/default.png') }}" class="game-img" alt="Default Image">
         @endif
 
-        <div class="info"><span class="label">Kode Game:</span> {{ $game['gameCode'] }}</div>
-        <div class="info"><span class="label">Genre:</span> {{ $game['genre'] }}</div>
-        <div class="info"><span class="label">Platform:</span> {{ $game['platform'] }}</div>
-        <div class="info"><span class="label">Harga:</span> ${{ $game['price'] }}</div>
-        <div class="info"><span class="label">Rilis:</span> {{ $game['releaseDate'] }}</div>
-        <div class="info"><span class="label">Developer:</span> {{ $game['developer'] }}</div>
-        <div class="info"><span class="label">Publisher:</span> {{ $game['publisher'] }}</div>
-        <div class="info"><span class="label">Deskripsi:</span><br> {{ $game['description'] }}</div>
+        <div class="info">
+            <p><strong>Genre:</strong> {{ $game['genre'] }}</p>
+            <p><strong>Platform:</strong> {{ $game['platform'] }}</p>
+            <p><strong>Price:</strong> ${{ $game['price'] }}</p>
+            <p><strong>Release Date:</strong> {{ $game['releaseDate'] }}</p>
+            <p><strong>Developer:</strong> {{ $game['developer'] }}</p>
+            <p><strong>Publisher:</strong> {{ $game['publisher'] }}</p>
+            <p><strong>Description:</strong> {{ $game['description'] }}</p>
+        </div>
 
-        <a href="{{ url('/user/dashboard') }}" class="back-link">← Kembali ke Daftar Game</a>
+        @if (!empty($game['videolink']))
+            <h3>🎬 Trailer</h3>
+            <iframe src="{{ $game['videolink'] }}" allowfullscreen></iframe>
+        @endif
+
+        <a class="back" href="{{ url('/user/dashboard') }}">⬅ Kembali ke Dashboard</a>
     </div>
 
 </body>
