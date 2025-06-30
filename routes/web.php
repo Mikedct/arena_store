@@ -2,49 +2,57 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Game;
-// HOME / LANDING PAGE
-Route::get('/', function () {
-    return view('welcome'); // atau halaman home custom
+
+// Akses game_store.test → redirect ke user login
+Route::redirect('/', '/user/login');
+
+/**
+ * ===========================
+ * AUTH - LOGIN & REGISTER
+ * ===========================
+ */
+
+// User login & register
+Route::view('/user/login', 'user.auth.login')->name('user.login');
+Route::view('/user/register', 'user.auth.register')->name('user.register');
+
+// Admin login (via game_store.test/admin/login)
+Route::view('/admin/login', 'admin.auth.login')->name('admin.login');
+
+/**
+ * ===========================
+ * USER 
+ * ===========================
+ */
+
+Route::prefix('user')->group(function () {
+    Route::view('/dashboard', 'user.dashboard')->name('user.dashboard');
+
+    Route::get('/games', function () {
+        $games = Game::all();
+        return view('user.games', compact('games'));
+    });
+
+    Route::view('/orders', 'user.orders')->name('user.orders');
+    Route::view('/payment', 'user.payment')->name('user.payment');
+    Route::view('/reviews', 'user.reviews')->name('user.reviews');
 });
 
-// AUTH USER (Login & Register Page)
-Route::get('/login', function () {
-    return view('auth.login');
-});
+/**
+ * ===========================
+ * ADMIN
+ * ===========================
+ */
 
-Route::get('/register', function () {
-    return view('auth.register');
-});
+Route::prefix('admin')->group(function () {
+    Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
 
-// DASHBOARD USER
-Route::get('/user/dashboard', function () {
-    return view('user.dashboard');
-});
+    Route::get('/games', function () {
+        $games = Game::all();
+        return view('admin.games', compact('games'));
+    });
 
-Route::get('/game', function () {
-    $game = Game::all();
-    return view('user.game', compact('game'));
+    Route::view('/orders', 'admin.orders')->name('admin.orders');
+    Route::view('/payment', 'admin.payment')->name('admin.payment');
+    Route::view('/reviews', 'admin.reviews')->name('admin.reviews');
 });
-
-// DASHBOARD ADMIN
-Route::get('/admin/login', function () {
-    return view('auth.login'); // bisa pakai login yang sama
-});
-
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-});
-
-Route::get('/game/{id}', function ($id) {
-    return view('user.game-detail', ['id' => $id]);
-});
-
-// ORDER & PAYMENT
-Route::get('/order', function () {
-    return view('user.order');
-});
-
-Route::get('/payment', function () {
-    return view('user.payment');
-});
-

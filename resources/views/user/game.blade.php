@@ -1,26 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Game')
-
 @section('content')
-<h2 class="mb-4">Daftar Game</h2>
-
-<div class="row">
-    @foreach ($game as $game)
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="{{ $game->image }}" class="card-img-top" alt="{{ $game->title }}" style="height: 200px; object-fit: cover;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ $game->title }}</h5>
-                    <p class="card-text text-muted">{{ $game->genre }} | {{ $game->platform }}</p>
-                    <p class="card-text">{{ Str::limit($game->description, 80) }}</p>
-                    <div class="mt-auto">
-                        <p class="text-white fw-bold">Rp{{ number_format($game->price, 0, ',', '.') }}</p>
-                        <a href="{{ url('/game/' . $game->gameID) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
-                    </div>
+<div style="background:#000; color:#f9f871; min-height:100vh; padding:2rem;">
+    <h2>Daftar Game</h2>
+    <div class="row">
+        @foreach($games as $game)
+        <div class="col-md-4 mb-3">
+            <div class="card" style="background:#1c1c1c; color:#f9f871; border:1px solid #3a3a3a;">
+                <div class="card-body">
+                    <h5>{{ $game->title }}</h5>
+                    <p>Genre: {{ $game->genre }}</p>
+                    <p>Platform: {{ $game->platform }}</p>
+                    <p>Harga: ${{ number_format($game->price) }}</p>
+                    <a href="/user/game/order" class="btn btn-sm" style="background:#f9f871; color:#000;">Pesan</a>
                 </div>
             </div>
         </div>
-    @endforeach
+        @endforeach
+    </div>
 </div>
 @endsection

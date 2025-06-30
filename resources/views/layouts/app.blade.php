@@ -2,44 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Game Store')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000000;
-            color: #ffffff;
-        }
-
-        .navbar, .btn-primary {
-            background-color: #5b63b7 !important;
-            border-color: #5b63b7 !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #4a52a0 !important;
-        }
-
-        .card {
-            background-color: #1a1a1a;
-            border: 1px solid #5b63b7;
-        }
-
-        a {
-            color: #5b63b7;
-        }
-
-        a:hover {
-            color: #ffffff;
-        }
-    </style>
+    <title>Game Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar navbar-dark px-4">
-        <span class="navbar-brand">Game Store</span>
+<body style="background-color:#000; color:#f9f871;">
+
+    <nav class="navbar navbar-dark" style="background:#1c1c1c;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Game Store</a>
+        </div>
     </nav>
 
-    <div class="container mt-5">
+    <main class="container py-4">
         @yield('content')
-    </div>
+    </main>
+
 </body>
 </html>
