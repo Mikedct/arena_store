@@ -51,6 +51,17 @@ Route::get('/user/dashboard', function (\Illuminate\Http\Request $request) {
     return view('dashboard_user', compact('games'));
 });
 
+Route::get('/user/game-detail/{id}', function ($id) {
+    $response = Http::get("http://localhost/game_store/game_store/game.php?gameID=$id");
+
+    if ($response->successful() && !empty($response->json())) {
+        $game = $response->json()[0]; // karena API mengembalikan array
+        return view('user.game-detail', compact('game'));
+    }
+
+    return abort(404, 'Game tidak ditemukan');
+});
+
 // Route::get('/games', [GameController::class, 'index']);
 // Route::get('/games/{id}', [GameController::class, 'show']);
 

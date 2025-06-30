@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Game Store - User Dashboard</title>
     <style>
@@ -40,7 +41,7 @@
             background: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             display: flex;
             gap: 20px;
@@ -77,12 +78,14 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1>Game Store - Daftar Game</h1>
 
     <form method="GET" action="{{ url('/user/dashboard') }}">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul, genre, atau platform...">
+        <input type="text" name="search" value="{{ request('search') }}"
+            placeholder="Cari judul, genre, atau platform...">
         <button type="submit">Cari</button>
     </form>
 
@@ -102,7 +105,11 @@
                 @endif
 
                 <div class="game-info">
-                    <h2>{{ $game['title'] }} ({{ $game['gameCode'] }})</h2>
+                    <h2>
+                        <a href="{{ url('/user/game-detail/' . $game['gameID']) }}" style="text-decoration: none; color:rgb(47, 41, 214);">
+                            {{ $game['title'] }} ({{ $game['gameCode'] }})
+                        </a>
+                    </h2>
                     <p><span class="label">Genre:</span> {{ $game['genre'] }}</p>
                     <p><span class="label">Platform:</span> {{ $game['platform'] }}</p>
                     <p><span class="label">Harga:</span> ${{ $game['price'] }}</p>
@@ -116,12 +123,13 @@
     @endif
 
 </body>
+
 </html>
 
 {{-- Helper --}}
 @php
-function is_assoc(array $arr)
-{
-    return array_keys($arr) !== range(0, count($arr) - 1);
-}
+    function is_assoc(array $arr)
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
 @endphp
