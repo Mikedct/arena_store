@@ -1,49 +1,45 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Game;
+use Illuminate\Support\Facades\Http;
 
 class GameController extends Controller
 {
-    // 🔹 GET /api/games
-    public function index()
+    public function dashboard(Request $request)
     {
-        return response()->json(Game::all());
+        $query = $request->query('search');
+        $games = [];
+
+        if ($query) {
+            $responseTitle = Http::get("http://localhost/game_store/game.php?title=$query");
+            $responseGenre = Http::get("http://localhost/game_store/game.php?genre=$query");
+            $responsePlatform = Http::get("http://localhost/game_store/game.php?platform=$query");
+
+            $allResults = array_merge(
+                $responseTitle->successful() ? $responseTitle->json() : [],
+                $responseGenre->successful() ? $responseGenre->json() : [],
+                $responsePlatform->successful() ? $responsePlatform->json() : []
+            );
+
+            $games = collect($allResults)->unique('gameID')->values()->all();
+        } else {
+            $response = Http::get("http://localhost/game_store/game.php");
+            $games = $response->successful() ? $response->json() : [];
+        }
+
+        return view('dashboard_user', compact('games'));
     }
 
-    // 🔹 GET /api/games/{id}
     public function show($id)
     {
-        $game = Game::find($id);
-        return $game ? response()->json($game) : response()->json(['message' => 'Game not found'], 404);
-    }
+        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
 
-    // 🔹 POST /api/games
-    public function store(Request $request)
-    {
-        $game = Game::create($request->all());
-        return response()->json($game, 201);
-    }
+        if ($response->successful() && !empty($response->json())) {
+            $game = $response->json()[0];
+            return view('user.game-detail', compact('game'));
+        }
 
-    // 🔹 PUT /api/games/{id}
-    public function update(Request $request, $id)
-    {
-        $game = Game::find($id);
-        if (!$game) return response()->json(['message' => 'Game not found'], 404);
-
-        $game->update($request->all());
-        return response()->json($game);
-    }
-
-    // 🔹 DELETE /api/games/{id}
-    public function destroy($id)
-    {
-        $game = Game::find($id);
-        if (!$game) return response()->json(['message' => 'Game not found'], 404);
-
-        $game->delete();
-        return response()->json(['message' => 'Game deleted successfully']);
+        return abort(404, 'Game tidak ditemukan');
     }
 }
