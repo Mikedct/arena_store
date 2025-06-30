@@ -11,10 +11,12 @@ class ReviewController extends Controller
     public function index($id)
     {
         $response = Http::get("http://localhost/game_store/review.php?gameID=$id");
-        $review = $response->successful() ? $response->json() : [];
 
-        return response()->json($review);
+        return $response->successful()
+            ? response()->json($response->json())
+            : response()->json([], 500);
     }
+
 
     public function store(Request $request, $id)
     {

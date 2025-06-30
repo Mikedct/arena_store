@@ -27,8 +27,12 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/game/{id}', [DashboardController::class, 'show'])->name('game.show');
 
     // Review Game
-    Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
+    // GET: Lihat review
     Route::get('/game/{id}/review', [ReviewController::class, 'index'])->name('review.index');
+
+    // POST: Kirim review
+    Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
+
 
     // Dummy pages (jika belum dibuat controller)
     Route::view('/orders', 'user.orders')->name('orders');
@@ -50,5 +54,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::view('/orders', 'admin.orders')->name('orders');
     Route::view('/payment', 'admin.payment')->name('payment');
-    Route::view('/reviews', 'admin.review')->name('review');
+    Route::view('/review', 'admin.review')->name('review');
 });

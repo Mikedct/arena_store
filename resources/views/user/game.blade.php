@@ -48,18 +48,20 @@
         <p class="text-red-600 mb-4">{{ session('error') }}</p>
     @endif
 
+    {{-- Review Form --}}
     <form action="{{ route('user.review.store', $game['gameID']) }}" method="POST" class="space-y-4">
         @csrf
         <input type="text" name="title" placeholder="Judul Review" class="w-full border rounded p-2" required>
         <textarea name="text" rows="4" placeholder="Tulis review kamu..." class="w-full border rounded p-2" required></textarea>
         <label class="block">
             <span class="font-semibold">Rating (1 - 5):</span>
-            <input type="number" name="rating" min="1" max="5" class="border rounded p-2 w-24" required>
+            <input type="number" name="rating" min="1" max="5" step="1" class="border rounded p-2 w-24" required>
         </label>
         <button type="submit" class="bg-[#5b63b7] text-white px-4 py-2 rounded hover:bg-[#434bac]">
             Kirim Review
         </button>
     </form>
+
 </div>
 
 {{-- List Review --}}
@@ -72,29 +74,41 @@
 
 {{-- AJAX Review Load --}}
 <script>
-    fetch(`{{ route('user.review.index', $game['gameID']) }}`)
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById('review-section');
-            container.innerHTML = '';
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch(`http://localhost/game_store/review.php?gameID={{ $game['gameID'] }}`)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('review-section');
+                container.innerHTML = '';
 
-            if (data.length === 0) {
-                container.innerHTML = '<p class="text-gray-500">Belum ada review.</p>';
-            } else {
+                if (!Array.isArray(data) || data.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">Belum ada review.</p>';
+                    return;
+                }
+
                 data.forEach(r => {
-                    const stars = '★'.repeat(r.Rating) + '☆'.repeat(5 - r.Rating);
+                    const username = r.username || 'Anonim';
+                    const date = r.Date || '-';
+                    const title = r.title || '(Tidak ada judul)';
+                    const text = r.Text || '(Tidak ada isi)';
+                    const rating = Math.max(1, Math.min(5, parseInt(r.Rating) || 1)); // Batasi rating 1 - 5
+                    const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+
                     container.innerHTML += `
                         <div class="bg-white p-4 rounded shadow border border-gray-100">
-                            <p class="text-sm text-gray-700 mb-1"><strong>${r.username}</strong> - ${r.Date}</p>
+                            <p class="text-sm text-gray-700 mb-1"><strong>${username}</strong> - ${date}</p>
                             <p class="text-yellow-500 mb-1">${stars}</p>
-                            <p class="font-semibold">${r.title}</p>
-                            <p class="text-gray-600">${r.Text}</p>
+                            <p class="font-semibold">${title}</p>
+                            <p class="text-gray-600">${text}</p>
                         </div>`;
                 });
-            }
-        }).catch(() => {
-            const container = document.getElementById('review-section');
-            container.innerHTML = '<p class="text-red-500">Gagal memuat review.</p>';
-        });
+            })
+            .catch((err) => {
+                const container = document.getElementById('review-section');
+                console.error('Error memuat review:', err);
+                container.innerHTML = '<p class="text-red-500">Gagal memuat review. Coba beberapa saat lagi.</p>';
+            });
+    });
 </script>
+
 @endsection

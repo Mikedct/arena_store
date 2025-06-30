@@ -40,9 +40,6 @@
 
             <div class="space-x-4">
                 <a href="{{ route('user.dashboard') }}" class="hover:underline">Dashboard</a>
-                <a href="{{ route('user.orders') }}" class="hover:underline">Orders</a>
-                <a href="{{ route('user.reviews') }}" class="hover:underline">Reviews</a>
-                <a href="{{ route('user.payment') }}" class="hover:underline">Payment</a>
             </div>
         </div>
     </nav>
