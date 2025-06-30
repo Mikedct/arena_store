@@ -90,6 +90,9 @@
         <label for="image">Gambar</label>
         <input type="file" name="image" accept="image/*">
 
+        <label>Link Video</label>
+        <input type="text" name="videolink">
+
         <label>Admin ID</label>
         <input type="number" name="adminID" required>
 

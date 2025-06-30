@@ -26,6 +26,7 @@ class GameController extends Controller
             'publisher' => 'required|string',
             'description' => 'required|string',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'videolink' => 'nullable|string',
             'adminID' => 'required|integer',
         ]);
 
@@ -41,6 +42,10 @@ class GameController extends Controller
         } else {
             // Jika tidak upload gambar, tetap isi kosong atau default
             $data['image'] = null;
+        }
+
+        if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
+            $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
         }
 
         // Kirim ke API
@@ -103,6 +108,11 @@ class GameController extends Controller
             // Jika tidak upload gambar, tetap isi kosong atau default
             $data['image'] = null;
         }
+
+        if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
+            $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
+        }
+
 
         // Kirim ke game.php via PUT (asForm → x-www-form-urlencoded)
         $response = Http::withHeaders([
