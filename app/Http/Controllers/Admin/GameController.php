@@ -11,7 +11,7 @@ class GameController extends Controller
 {
     public function create()
     {
-        return view('game.create');
+        return view('admin.game-create');
     }
 
     public function store(Request $request)
@@ -31,6 +31,7 @@ class GameController extends Controller
             'adminID' => 'required|integer',
         ]);
 
+        // Proses upload gambar jika ada
         if ($request->hasFile('image')) {
             $originalName = $request->file('image')->getClientOriginalName();
             $extension = $request->file('image')->getClientOriginalExtension();
@@ -42,10 +43,12 @@ class GameController extends Controller
             $data['image'] = null;
         }
 
+        // Format video link YouTube
         if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
             $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
         }
 
+        // Kirim data ke API
         $response = Http::asJson()->post('http://localhost/game_store/game.php', $data);
 
         if ($response->successful()) {
@@ -64,7 +67,7 @@ class GameController extends Controller
             if (isset($game[0])) {
                 $game = $game[0];
             }
-            return view('game.edit', compact('game'));
+            return view('admin.game-edit', compact('game'));
         }
 
         return redirect('/admin/dashboard')->withErrors(['message' => 'Gagal memuat data game.']);
@@ -89,6 +92,7 @@ class GameController extends Controller
 
         $data['gameID'] = (int) $id;
 
+        // Upload gambar baru jika ada
         if ($request->hasFile('image')) {
             $originalName = $request->file('image')->getClientOriginalName();
             $extension = $request->file('image')->getClientOriginalExtension();
@@ -100,10 +104,12 @@ class GameController extends Controller
             $data['image'] = null;
         }
 
+        // Format video link
         if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
             $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
         }
 
+        // Kirim ke API untuk update
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -131,4 +137,21 @@ class GameController extends Controller
 
         return back()->withErrors(['message' => 'Gagal menghapus game.']);
     }
+
+    public function show($id)
+    {
+        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
+
+        if ($response->successful() && !empty($response->json())) {
+            $game = $response->json()[0];
+
+            $reviewResponse = Http::get("http://localhost/game_store/review.php?gameID=$id");
+            $reviews = $reviewResponse->successful() ? $reviewResponse->json() : [];
+
+            return view('admin.game', compact('game', 'reviews'));
+        }
+
+        return abort(404, 'Game tidak ditemukan.');
+    }
+
 }
