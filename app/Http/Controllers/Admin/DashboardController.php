@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
@@ -11,11 +12,11 @@ class DashboardController extends Controller
         $response = Http::get('http://localhost/game_store/game.php');
 
         if ($response->successful()) {
-            $games = $response->json(); // bisa array tunggal atau array banyak
+            $game = $response->json();
         } else {
-            $games = [];
+            $game = [];
         }
 
-        return view('admin.dashboard', compact('games'));
+        return view('admin.dashboard', compact('game'));
     }
 }

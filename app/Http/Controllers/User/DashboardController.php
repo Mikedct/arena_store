@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ class DashboardController extends Controller
     {
         $query = $request->query('search');
         $games = [];
+        $user = session('user'); // Ambil user dari session
 
         if ($query) {
             $responseTitle = Http::get("http://localhost/Game_Store/game.php?title=$query");
@@ -29,7 +31,7 @@ class DashboardController extends Controller
             $games = $response->successful() ? $response->json() : [];
         }
 
-        return view('user.dashboard', compact('games'));
+        return view('user.dashboard', compact('games', 'user'));
     }
 
     public function show($id)
@@ -44,3 +46,4 @@ class DashboardController extends Controller
         return abort(404, 'Game tidak ditemukan');
     }
 }
+

@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login User</title>
     <style>
         body {
-            background-color: #000000;
+            background-color: #000;
             color: #5b63b7;
             font-family: Arial, sans-serif;
             display: flex;
@@ -43,18 +43,29 @@
             color: #5b63b7;
             text-decoration: underline;
         }
+        .error, .success {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .error { color: red; }
+        .success { color: green; }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login Admin</h2>
+        <h2>Login User</h2>
 
-        @if ($errors->has('login'))
-            <p style="color: red;">{{ $errors->first('login') }}</p>
+        {{-- Message --}}
+        @if (session('error'))
+            <p class="error">{{ session('error') }}</p>
+        @elseif (session('success'))
+            <p class="success">{{ session('success') }}</p>
         @endif
 
-        <form method="POST" action="{{ url('/login') }}">
+        {{-- Login Form --}}
+        <form method="POST" action="{{ route('user.login.submit') }}">
             @csrf
+
             <label>Username:</label>
             <input type="text" name="username" required>
 
@@ -64,7 +75,7 @@
             <button type="submit">Login</button>
         </form>
 
-        <p>Belum punya akun? <a href="{{ url('/register') }}">Register</a></p>
+        <p style="margin-top:10px;">Belum punya akun? <a href="{{ route('user.register') }}">Daftar</a></p>
     </div>
 </body>
 </html>
