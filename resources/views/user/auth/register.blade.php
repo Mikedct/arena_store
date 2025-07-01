@@ -6,7 +6,7 @@
     <style>
         body {
             background-color: #000000;
-            color: #5b63b7;
+            color: 	#4f9bd9;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -18,7 +18,7 @@
             background-color: #111;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #5b63b7;
+            box-shadow: 0 0 10px 	#4f9bd9;
             width: 350px;
             max-height: 95vh;
             overflow-y: auto;
@@ -31,23 +31,23 @@
             padding: 10px;
             margin-top: 6px;
             margin-bottom: 12px;
-            border: 1px solid #5b63b7;
-            background-color: #000;
-            color: #5b63b7;
+            border: 1px solid 	#4f9bd9;
+            background-color: #000000;
+            color: 	#4f9bd9;
             border-radius: 4px;
         }
         button {
             width: 100%;
             padding: 10px;
-            background-color: #5b63b7;
+            background-color: 	#4f9bd9;
             border: none;
-            color: #000;
+            color: #000000;
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
         }
         a {
-            color: #5b63b7;
+            color: 	#4f9bd9;
             text-decoration: underline;
             display: inline-block;
             margin-top: 12px;
@@ -100,6 +100,9 @@
 
             <label>Password</label>
             <input type="password" name="password" required>
+
+            <label>Confirm Password</label>
+            <input type="password" name="password_confirmation" required>
 
             <button type="submit">Register</button>
         </form>

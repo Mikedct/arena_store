@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Game Store')</title>
+    <title>@yield('title', 'Admin Panel - Game Store')</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-50 min-h-screen">
 
-    {{-- Navbar User --}}
-    @include('layouts.partials.user-navbar')
+    {{-- Navbar Admin --}}
+    @include('layouts.partials.admin-navbar')
 
     {{-- Content --}}
-    <main class="container mx-auto px-4 py-8">
+    <main class="p-6">
         @yield('content')
     </main>
 

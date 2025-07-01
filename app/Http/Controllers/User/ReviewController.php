@@ -17,12 +17,21 @@ class ReviewController extends Controller
             : response()->json([], 500);
     }
 
-
     public function store(Request $request, $id)
     {
-        $response = Http::post("http://localhost/game_store/review.php", [
-            'userID' => 1, // nanti diganti sesuai user login
-            'username' => 'guest', // ganti dengan auth user
+        $token = session('jwt_token');
+        $userID = session('user_id');
+        $username = session('user');
+
+        if (!$token || !$userID || !$username) {
+            return redirect('/user/login')->withErrors(['message' => 'Sesi login tidak valid.']);
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token
+        ])->post("http://localhost/game_store/review.php", [
+            'userID' => $userID,
+            'username' => $username,
             'gameID' => $id,
             'title' => $request->input('title'),
             'Text' => $request->input('text'),

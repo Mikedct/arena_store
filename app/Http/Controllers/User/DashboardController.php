@@ -11,13 +11,23 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
         $query = $request->query('search');
+        $user = session('user');
+        $token = session('jwt_token');
         $games = [];
-        $user = session('user'); // Ambil user dari session
+
+        if (!$token) {
+            return redirect('/user/login')->withErrors(['message' => 'Harap login kembali']);
+        }
+
+        $baseUrl = "http://localhost/game_store/game.php";
 
         if ($query) {
-            $responseTitle = Http::get("http://localhost/Game_Store/game.php?title=$query");
-            $responseGenre = Http::get("http://localhost/Game_Store/game.php?genre=$query");
-            $responsePlatform = Http::get("http://localhost/Game_Store/game.php?platform=$query");
+            $responseTitle = Http::withHeaders(['Authorization' => "Bearer $token"])
+                ->get("$baseUrl?title=$query");
+            $responseGenre = Http::withHeaders(['Authorization' => "Bearer $token"])
+                ->get("$baseUrl?genre=$query");
+            $responsePlatform = Http::withHeaders(['Authorization' => "Bearer $token"])
+                ->get("$baseUrl?platform=$query");
 
             $allResults = array_merge(
                 $responseTitle->successful() ? $responseTitle->json() : [],
@@ -27,7 +37,8 @@ class DashboardController extends Controller
 
             $games = collect($allResults)->unique('gameID')->values()->all();
         } else {
-            $response = Http::get("http://localhost/Game_Store/game.php");
+            $response = Http::withHeaders(['Authorization' => "Bearer $token"])
+                ->get($baseUrl);
             $games = $response->successful() ? $response->json() : [];
         }
 
@@ -36,7 +47,13 @@ class DashboardController extends Controller
 
     public function show($id)
     {
-        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
+        $token = session('jwt_token');
+        if (!$token) {
+            return redirect('/user/login')->withErrors(['message' => 'Harap login kembali']);
+        }
+
+        $response = Http::withHeaders(['Authorization' => "Bearer $token"])
+            ->get("http://localhost/game_store/game.php?gameID=$id");
 
         if ($response->successful() && !empty($response->json())) {
             $game = $response->json()[0];
@@ -46,4 +63,3 @@ class DashboardController extends Controller
         return abort(404, 'Game tidak ditemukan');
     }
 }
-

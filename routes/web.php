@@ -8,23 +8,30 @@ use App\Http\Controllers\User\GameController as UserGameController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\GameController; // ✅ untuk route auth.user terakhir
 use App\Models\Game;
 
 // Redirect default route ke login
 Route::redirect('/', '/user/login');
 
-// AUTH ROUTES
+// ============================
+// AUTH ROUTES (USER)
+// ============================
 Route::view('/user/login', 'user.auth.login')->name('user.login');
 Route::view('/user/register', 'user.auth.register')->name('user.register');
+
 Route::post('/user/login', [AuthController::class, 'login'])->name('user.login.submit');
 Route::post('/user/register', [AuthController::class, 'register'])->name('user.register.submit');
+
 Route::post('/user/logout', function () {
     session()->flush();
     return redirect()->route('user.login')->with('success', 'Logout berhasil');
 })->name('user.logout');
 
-// USER ROUTES
-Route::prefix('user')->name('user.')->middleware('auth.bearer')->group(function () {
+// ============================
+// USER ROUTES (BUTUH LOGIN)
+// ============================
+Route::prefix('user')->name('user.')->middleware('auth.user')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/game/{id}', [UserGameController::class, 'show'])->name('game.show');
     Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
@@ -32,9 +39,11 @@ Route::prefix('user')->name('user.')->middleware('auth.bearer')->group(function 
     Route::view('/payment', 'user.payment')->name('payment');
 });
 
-// ADMIN ROUTES
+// ============================
+// ADMIN ROUTES (tidak pakai middleware di sini, tapi bisa ditambah nanti)
+// ============================
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Game Management
     Route::get('/game/{id}', [AdminGameController::class, 'show'])->name('game.show');
@@ -56,3 +65,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/payment', 'admin.payment')->name('payment');
     Route::view('/review', 'admin.review')->name('review.overview');
 });
+
+// ============================
+// OPSIONAL: Tambahan route proteksi token khusus
+// (jika tidak mau digabung ke atas, bisa simpan sini)
+// ============================
+/*
+Route::middleware(['auth.user'])->group(function () {
+    Route::get('/game/{id}', [GameController::class, 'show']);
+    // Tambahkan route lain yang ingin dilindungi token di sini
+});
+*/

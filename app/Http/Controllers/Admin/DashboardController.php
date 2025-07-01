@@ -1,22 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     public function index()
-    {
-        $response = Http::get('http://localhost/game_store/game.php');
+{
+    $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
 
-        if ($response->successful()) {
-            $game = $response->json();
-        } else {
-            $game = [];
-        }
-
-        return view('admin.dashboard', compact('game'));
+    if (!$token) {
+        return redirect('/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
     }
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $token
+    ])->get('http://localhost/game_store/game.php');
+
+    if ($response->successful()) {
+        $games = $response->json();
+        return view('admin.dashboard', compact('games'));
+    }
+
+    return view('admin.dashboard')->withErrors(['message' => 'Gagal mengambil data game.']);
+}
 }
