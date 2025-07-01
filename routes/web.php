@@ -8,19 +8,37 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminAuthController;
 
 
 Route::get('/', function () {
-    if (!session()->has('user')) {
-        return redirect('/login');
-    }
-    return view('user.dashboard');
+    return redirect('/user/dashboard');
+});
+
+Route::get('/user', function () {
+    return redirect('/user/dashboard');
 });
 
 // Admin
-Route::get('/admin/dashboard', [DashboardController::class, 'index']);
-Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
-Route::get('/user/detail/{id}', [UserController::class, 'show'])->name('user.user-detail');
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+Route::middleware(['admin.auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+    Route::get('/user/detail/{id}', [UserController::class, 'show'])->name('user.user-detail');
+
+    // Game CRUD (jika admin perlu akses ini)
+    Route::get('/game/create', [GameController::class, 'create'])->name('game.create');
+    Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
+    Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
+    Route::put('/game/{id}/update', [GameController::class, 'update'])->name('game.update');
+    Route::delete('/game/{id}', [GameController::class, 'destroy'])->name('game.destroy');
+    
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+});
 
 
 Route::get('/game/create', [GameController::class, 'create'])->name('game.create');

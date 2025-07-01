@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Daftar Pengguna</title>
@@ -22,10 +23,11 @@
             border-collapse: collapse;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px 16px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
@@ -56,6 +58,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1>👥 Daftar Pengguna</h1>
@@ -82,8 +85,16 @@
                         <td>{{ $user['email'] }}</td>
                         <td>{{ \Carbon\Carbon::parse($user['dateOfBirth'])->format('d M Y') }}</td>
                         <td>{{ $user['phoneNumber'] }}</td>
-                        <td class="action">
-                            <a href="{{ route('user.user-detail', $user['userID']) }}">Lihat Detail</a>
+                        <td>
+                            <form action="{{ route('admin.users.destroy', $user['userID']) }}" method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    style="background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;">
+                                    🗑️ Hapus
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -94,4 +105,5 @@
     @endif
 
 </body>
+
 </html>

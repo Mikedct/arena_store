@@ -30,6 +30,22 @@ class UserController extends Controller
         return view('admin.users', ['users' => []])->withErrors(['message' => 'Gagal memuat data user.']);
     }
 
+    public function destroy($id)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->send('DELETE', 'http://localhost/game_store/user.php', [
+                    'json' => [
+                        'userID' => (int) $id,
+                    ],
+                ]);
 
+        if ($response->successful()) {
+            return redirect()->route('admin.users')->with('success', 'User berhasil dihapus.');
+        }
+
+        return back()->withErrors(['message' => 'Gagal menghapus user.']);
+    }
 
 }

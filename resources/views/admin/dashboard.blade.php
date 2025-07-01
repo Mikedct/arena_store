@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+@extends('layouts.admin')
+@section('content')
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Game Store Dashboard</title>
+    <title>Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
@@ -121,7 +123,7 @@
 </head>
 
 <body>
-
+    
     <h1>🎮 Game Store Dashboard</h1>
 
     <a class="add-button" href="{{ url('/game/create') }}">➕ Tambah Game Baru</a>
@@ -169,6 +171,7 @@
     @endif
 
 </body>
+@endsection
 
 </html>
 
