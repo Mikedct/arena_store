@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+
 
 Route::get('/', function () {
     if (!session()->has('user')) {
@@ -25,32 +27,15 @@ Route::get('/game/create', [GameController::class, 'create'])->name('game.create
 Route::post('/game/store', [GameController::class, 'store'])->name('game.store');
 
 //User
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/login', fn() => view('auth.login'));
-Route::get('/register', fn() => view('auth.register'));
-Route::get('/dashboard', fn() => view('dashboard'));
+Route::middleware(['user.auth'])->group(function () {
+    Route::get('/user/dashboard', [UserGameController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/user/game-detail/{id}', [UserGameController::class, 'show'])->name('user.game-detail');
 
-Route::get('/user/dashboard', [UserGameController::class, 'dashboard'])->name('user.dashboard');
-Route::get('/user/game-detail/{id}', [UserGameController::class, 'show'])->name('user.game-detail');
-
-// Route::get('/games', [GameController::class, 'index']);
-// Route::get('/games/{id}', [GameController::class, 'show']);
-
-// Route::get('/order', [OrderController::class, 'show']);
-// Route::post('/payment', [PaymentController::class, 'show']);
-// Route::post('/payment/process', [PaymentController::class, 'process']);
-
-
-// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-// Route::post('/login', [LoginController::class, 'login']);
-// Route::get('/logout', [LoginController::class, 'logout']);
-
-
-
-// Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
-// Route::post('/register', [RegisterController::class, 'register']);
-
-// Route::get('/game-view', [GameViewController::class, 'index']);
+});
 
 Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
 Route::put('/game/{id}/update', [GameController::class, 'update'])->name('game.update');

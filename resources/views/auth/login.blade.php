@@ -1,70 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login User</title>
     <style>
         body {
-            background-color: #000000;
-            color: #5b63b7;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: sans-serif;
+            background-color: #f5f5f5;
+            padding: 50px;
         }
-        .login-container {
-            background-color: #111;
+
+        .container {
+            width: 400px;
+            margin: auto;
+            background: white;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #5b63b7;
-            width: 300px;
+            box-shadow: 0 0 10px #ccc;
         }
-        input[type="text"],
-        input[type="password"] {
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #5b63b7;
-            background-color: #000;
-            color: #5b63b7;
         }
+
         button {
             width: 100%;
             padding: 10px;
-            background-color: #5b63b7;
+            background-color: #2d3748;
+            color: white;
             border: none;
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
+            border-radius: 5px;
         }
-        a {
-            color: #5b63b7;
-            text-decoration: underline;
+
+        .error {
+            color: red;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login Admin</h2>
+    <div class="container">
+        <h2>Login User</h2>
 
-        @if ($errors->has('login'))
-            <p style="color: red;">{{ $errors->first('login') }}</p>
+        @if(session('success'))
+            <p style="color: green;">{{ session('success') }}</p>
         @endif
 
-        <form method="POST" action="{{ url('/login') }}">
+        @if($errors->any())
+            <p class="error">{{ $errors->first() }}</p>
+        @endif
+
+        <form method="POST" action="{{ route('login') }}">
             @csrf
-            <label>Username:</label>
-            <input type="text" name="username" required>
-
-            <label>Password:</label>
-            <input type="password" name="password" required>
-
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
-
-        <p>Belum punya akun? <a href="{{ url('/register') }}">Register</a></p>
     </div>
 </body>
 </html>

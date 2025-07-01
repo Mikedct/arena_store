@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Admin;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -14,27 +14,40 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
+        $credentials = $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        $admin = Admin::where('username', $request->username)->first();
-
-        if (!$admin || md5($request->password, $admin->password)) {
-            return back()->withErrors(['login' => 'Username atau password salah.']);
+        // Ambil semua user dari API
+        $response = Http::get('http://localhost/game_store/user.php');
+        if (!$response->successful()) {
+            return back()->withErrors(['message' => 'Gagal terhubung ke server.']);
         }
 
-        Auth::login($admin);
-        return redirect('/dashboard');
+        $users = $response->json();
+
+        // Cari user yang cocok
+        $user = collect($users)->first(function ($u) use ($credentials) {
+            return $u['username'] === $credentials['username']
+                && $u['password'] === md5($credentials['password']); // asumsikan password di-hash md5
+        });
+
+        if (!$user) {
+            return back()->withErrors(['message' => 'Username atau password salah.']);
+        }
+
+        // Simpan data user ke session
+        Session::put('user', $user);
+
+        return redirect('/user/dashboard')->with('success', 'Login berhasil!');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/login');
+        Session::forget('user');
+        return redirect('/login')->with('success', 'Logout berhasil.');
     }
 }
+
 ?>

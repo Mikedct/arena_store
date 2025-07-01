@@ -1,6 +1,7 @@
 <!DOCTYPE html>
+@extends('layouts.user')
+@section('content')
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Game Store - Dashboard User</title>
@@ -106,7 +107,8 @@
     <h1>🎮 Game Store - Dashboard Pengguna</h1>
 
     <form class="search-form" method="GET" action="{{ url('/user/dashboard') }}">
-        <input type="text" name="search" placeholder="Cari berdasarkan judul, genre, platform..." value="{{ request('search') }}">
+        <input type="text" name="search" placeholder="Cari berdasarkan judul, genre, platform..."
+            value="{{ request('search') }}">
         <button type="submit">🔍 Cari</button>
     </form>
 
@@ -122,9 +124,8 @@
                 <div class="game-card">
                     @if (!empty($game['image']))
                         <div style="text-align: center;">
-                            <img src="{{ asset('images/games/' . $game['image']) }}"
-                                 alt="{{ $game['title'] }}"
-                                 style="width: 300px; height: 400px; object-fit: cover; border-radius: 8px;">
+                            <img src="{{ asset('images/games/' . $game['image']) }}" alt="{{ $game['title'] }}"
+                                style="width: 300px; height: 400px; object-fit: cover; border-radius: 8px;">
                         </div>
                     @endif
 
@@ -148,6 +149,7 @@
     @endif
 
 </body>
+@endsection
 
 </html>
 
