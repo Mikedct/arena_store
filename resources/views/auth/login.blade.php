@@ -62,6 +62,7 @@
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
+        <p>Belum Punya Akun? <a href="{{ route('register.form') }}">Daftar di Sini</a></p>
     </div>
 </body>
 </html>

@@ -31,6 +31,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
 Route::middleware(['user.auth'])->group(function () {
     Route::get('/user/dashboard', [UserGameController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/user/game-detail/{id}', [UserGameController::class, 'show'])->name('user.game-detail');

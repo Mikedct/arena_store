@@ -48,6 +48,37 @@ class AuthController extends Controller
         Session::forget('user');
         return redirect('/login')->with('success', 'Logout berhasil.');
     }
+
+    // ✅ Tampilkan form register
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
+    // ✅ Proses register
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => 'required|email',
+            'dateOfBirth' => 'required|date',
+            'phoneNumber' => 'required|string',
+            'password' => 'required|string|min:6|same:confirm_password',
+            'confirm_password' => 'required|string|min:6',
+        ]);
+
+        unset($validated['confirm_password']);
+
+        $response = Http::post('http://localhost/game_store/user.php', $validated);
+
+        if ($response->successful()) {
+            return redirect()->route('login.form')->with('success', 'Registrasi berhasil. Silakan login.');
+        }
+
+        return back()->withErrors(['message' => 'Registrasi gagal.'])->withInput();
+    }
 }
 
 ?>
