@@ -9,6 +9,7 @@ use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\PaymentController;
 
 
 Route::get('/', function () {
@@ -55,7 +56,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.st
 Route::middleware(['user.auth'])->group(function () {
     Route::get('/user/dashboard', [UserGameController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/user/game-detail/{id}', [UserGameController::class, 'show'])->name('user.game-detail');
-
+    Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
 });
 
 Route::get('/game/{id}/edit', [GameController::class, 'edit'])->name('game.edit');
