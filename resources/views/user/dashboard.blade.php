@@ -3,6 +3,11 @@
 @section('title', 'Game Store Dashboard')
 
 @section('content')
+@if(session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
 <div class="container mx-auto px-4 py-10">
     <h1 class="text-4xl font-bold text-center mb-10 text-[#5b63b7]">Game Store Dashboard</h1>
 

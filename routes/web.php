@@ -46,6 +46,8 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
     // Orders & Payment
     Route::get('/payment-history', [OrderController::class, 'history'])->name('payment.history');
     Route::post('/payment', [UserPaymentController::class, 'store'])->name('payment.store');
+    Route::post('/purchase', [OrderController::class, 'purchase'])->name('purchase');
+
 
     // Akun Pribadi
     Route::get('/{id}', [UserController::class, 'show'])->name('show');
