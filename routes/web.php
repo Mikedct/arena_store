@@ -71,7 +71,10 @@ Route::post('/admin/logout', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     // Game Management
+    Route::get('/game/create/', [AdminGameController::class, 'create'])->name('game.create');
+    Route::post('/game/store', [AdminGameController::class, 'store'])->name('game.store');
     Route::get('/game/{id}', [AdminGameController::class, 'show'])->name('game.show');
+    Route::put('/game/edit/{id}', [AdminGameController::class, 'update'])->name('admin.game.update');
     Route::get('/game/edit/{id}', [AdminGameController::class, 'edit'])->name('game.edit');
     Route::delete('/game/delete/{id}', [AdminGameController::class, 'destroy'])->name('game.delete');
 

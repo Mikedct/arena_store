@@ -38,8 +38,11 @@ class AuthController extends Controller
         // Simpan data admin ke session
         Session::put('jwt_token', $data['token']);
         Session::put('admin_token', $data['token']);
-        Session::put('admin_id', $data['adminID'] ?? null);
-        Session::put('admin_username', $data['username'] ?? $credentials['username']);
+        Session::put('admin', [
+            'adminID' => $data['adminID'] ?? null,
+            'username' => $data['username'] ?? $credentials['username'],
+        ]);
+
 
         return redirect()->route('admin.dashboard')->with('success', 'Login berhasil!');
     }

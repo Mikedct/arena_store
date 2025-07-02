@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form action="{{ url('/admin/game/create') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.game.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="adminID" value="{{ session('adminID') }}">
 

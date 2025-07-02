@@ -17,6 +17,11 @@ class GameController extends Controller
 
     public function store(Request $request)
     {
+        $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
+
+        if (!$token) {
+            return redirect('/admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
+        }
         $data = $request->validate([
             'gameCode' => 'required|string',
             'title' => 'required|string',
@@ -29,8 +34,16 @@ class GameController extends Controller
             'description' => 'required|string',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'videolink' => 'nullable|string',
-            'adminID' => 'required|integer',
         ]);
+
+        $admin = Session::get('admin');
+
+        if (!$admin || !isset($admin['adminID'])) {
+            return redirect('/admin/login')->withErrors(['message' => 'Admin belum login.']);
+        }
+
+        $data['adminID'] = $admin['adminID'];
+
 
         if ($request->hasFile('image')) {
             $originalName = $request->file('image')->getClientOriginalName();
@@ -51,7 +64,9 @@ class GameController extends Controller
         }
 
         // Kirim ke API
-        $response = Http::asJson()->post('http://localhost/game_store/game.php', $data);
+        $response = Http::withHeaders(headers: [
+            'Authorization' => 'Bearer ' . $token
+        ])->post("http://localhost/game_store/game.php", $data);
 
         if ($response->successful()) {
             return redirect('/admin/dashboard')->with('success', 'Game berhasil ditambahkan!');
@@ -68,9 +83,9 @@ class GameController extends Controller
             return redirect('/admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
         }
 
-        $response = Http::withHeaders([
+        $response = Http::withHeaders(headers: [
             'Authorization' => 'Bearer ' . $token
-        ])->get('http://localhost/game_store/game.php');
+        ])->get("http://localhost/game_store/game.php?gameID=$id");
 
         if ($response->successful()) {
             $game = $response->json();
@@ -88,6 +103,11 @@ class GameController extends Controller
 
     public function update(Request $request, $id)
     {
+        $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
+
+        if (!$token) {
+            return redirect('/admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
+        }
         $data = $request->validate([
             'gameCode' => 'required|string',
             'title' => 'required|string',
@@ -99,8 +119,7 @@ class GameController extends Controller
             'publisher' => 'required|string',
             'description' => 'required|string',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'videolink' => 'nullable|string',
-            'adminID' => 'required|integer',
+            'videolink' => 'nullable|string'
         ]);
 
         $data['gameID'] = (int) $id;
@@ -128,6 +147,7 @@ class GameController extends Controller
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
         ])->put('http://localhost/game_store/game.php', $data);
 
         if ($response->successful()) {
@@ -139,9 +159,16 @@ class GameController extends Controller
 
     public function destroy($id)
     {
+        $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
+
+        if (!$token) {
+            return redirect('/admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
+        }
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+
         ])->send('DELETE', 'http://localhost/game_store/game.php', [
                     'json' => [
                         'gameID' => $id,
