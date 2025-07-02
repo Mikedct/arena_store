@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('user.auth.login');
     }
 
     public function login(Request $request)
@@ -21,7 +21,6 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Kirim request login ke API JWT
         $response = Http::post('http://localhost/game_store/login_user.php', [
             'username' => $credentials['username'],
             'password' => $credentials['password'],
@@ -31,9 +30,8 @@ class AuthController extends Controller
 
         if ($response->successful() && isset($data['token'])) {
             Session::put('jwt_token', $data['token']);
-            Session::put('user', $credentials['username']);
-
-            return redirect('/user/dashboard')->with('success', 'Login berhasil!');
+            Session::put('user', $data['userID'] ?? $credentials['username']); // Save ID or username
+            return redirect()->route('user.dashboard')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors(['message' => $data['message'] ?? 'Login gagal.']);
@@ -43,26 +41,25 @@ class AuthController extends Controller
     {
         Session::forget('jwt_token');
         Session::forget('user');
-        return redirect('/user/login')->with('success', 'Logout berhasil.');
+        return redirect()->route('user.login')->with('success', 'Logout berhasil.');
     }
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        return view('user.auth.register');
     }
 
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'email' => 'required|email',
-            'dateOfBirth' => 'required|date',
-            'phoneNumber' => 'required|string',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required|string|min:6',
-
+            'firstName'         => 'required|string|max:255',
+            'lastName'          => 'required|string|max:255',
+            'username'          => 'required|string|max:255',
+            'email'             => 'required|email',
+            'dateOfBirth'       => 'required|date',
+            'phoneNumber'       => 'required|string',
+            'password'          => 'required|string|min:6|same:confirm_password',
+            'confirm_password'  => 'required|string|min:6',
         ]);
 
         unset($validated['confirm_password']);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 
 class GameController extends Controller
 {
@@ -31,24 +32,25 @@ class GameController extends Controller
             'adminID' => 'required|integer',
         ]);
 
-        // Proses upload gambar jika ada
         if ($request->hasFile('image')) {
             $originalName = $request->file('image')->getClientOriginalName();
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $extension;
 
             $request->file('image')->move(public_path('images/games'), $filename);
+
+            // Tambahkan nama file ke data yang akan dikirim ke API
             $data['image'] = $filename;
         } else {
+            // Jika tidak upload gambar, tetap isi kosong atau default
             $data['image'] = null;
         }
 
-        // Format video link YouTube
         if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
             $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
         }
 
-        // Kirim data ke API
+        // Kirim ke API
         $response = Http::asJson()->post('http://localhost/game_store/game.php', $data);
 
         if ($response->successful()) {
@@ -60,13 +62,24 @@ class GameController extends Controller
 
     public function edit($id)
     {
-        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
+        $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
+
+        if (!$token) {
+            return redirect('/admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token
+        ])->get('http://localhost/game_store/game.php');
 
         if ($response->successful()) {
             $game = $response->json();
+
+            // Jika API mengembalikan array object
             if (isset($game[0])) {
                 $game = $game[0];
             }
+
             return view('admin.game-edit', compact('game'));
         }
 
@@ -92,24 +105,26 @@ class GameController extends Controller
 
         $data['gameID'] = (int) $id;
 
-        // Upload gambar baru jika ada
         if ($request->hasFile('image')) {
             $originalName = $request->file('image')->getClientOriginalName();
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $extension;
 
             $request->file('image')->move(public_path('images/games'), $filename);
+
+            // Tambahkan nama file ke data yang akan dikirim ke API
             $data['image'] = $filename;
         } else {
+            // Jika tidak upload gambar, tetap isi kosong atau default
             $data['image'] = null;
         }
 
-        // Format video link
         if (isset($data['videolink']) && str_contains($data['videolink'], 'watch?v=')) {
             $data['videolink'] = str_replace('watch?v=', 'embed/', $data['videolink']);
         }
 
-        // Kirim ke API untuk update
+
+        // Kirim ke game.php via PUT (asForm → x-www-form-urlencoded)
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -128,8 +143,10 @@ class GameController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->send('DELETE', 'http://localhost/game_store/game.php', [
-            'json' => ['gameID' => $id]
-        ]);
+                    'json' => [
+                        'gameID' => $id,
+                    ]
+                ]);
 
         if ($response->successful()) {
             return redirect('/admin/dashboard')->with('success', 'Game berhasil dihapus.');
@@ -137,21 +154,4 @@ class GameController extends Controller
 
         return back()->withErrors(['message' => 'Gagal menghapus game.']);
     }
-
-    public function show($id)
-    {
-        $response = Http::get("http://localhost/game_store/game.php?gameID=$id");
-
-        if ($response->successful() && !empty($response->json())) {
-            $game = $response->json()[0];
-
-            $reviewResponse = Http::get("http://localhost/game_store/review.php?gameID=$id");
-            $reviews = $reviewResponse->successful() ? $reviewResponse->json() : [];
-
-            return view('admin.game', compact('game', 'reviews'));
-        }
-
-        return abort(404, 'Game tidak ditemukan.');
-    }
-
 }

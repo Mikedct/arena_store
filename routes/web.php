@@ -5,10 +5,12 @@ use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\GameController as UserGameController;
+use App\Http\Controllers\User\UserController;
+
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
-use App\Http\Controllers\GameController; // ✅ untuk route auth.user terakhir
+
 use App\Models\Game;
 
 // Redirect default route ke login
@@ -29,22 +31,29 @@ Route::post('/user/logout', function () {
 })->name('user.logout');
 
 // ============================
-// USER ROUTES (BUTUH LOGIN)
+// USER ROUTES (LOGIN REQUIRED)
 // ============================
 Route::prefix('user')->name('user.')->middleware('auth.user')->group(function () {
+    // Dashboard & Game
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/game/{id}', [UserGameController::class, 'show'])->name('game.show');
     Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
+
+    // Akun Pribadi
+    Route::get('/{id}', [UserController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [UserController::class, 'update'])->name('update');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+
+    // Orders & Payment
     Route::view('/orders', 'user.orders')->name('orders');
     Route::view('/payment', 'user.payment')->name('payment');
 });
 
 // ============================
-// ADMIN ROUTES (tidak pakai middleware di sini, tapi bisa ditambah nanti)
+// ADMIN ROUTES
 // ============================
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
     // Game Management
     Route::get('/game/{id}', [AdminGameController::class, 'show'])->name('game.show');
     Route::get('/game/edit/{id}', [AdminGameController::class, 'edit'])->name('game.edit');
@@ -56,23 +65,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/review/delete/{id}', [AdminReviewController::class, 'destroy'])->name('review.delete');
 
     // Static Pages
-    Route::get('/games', function () {
-        $games = Game::all();
-        return view('admin.games', compact('games'));
-    })->name('games');
-
+    Route::get('/games', fn() => view('admin.games', ['games' => Game::all()]))->name('games');
     Route::view('/orders', 'admin.orders')->name('orders');
     Route::view('/payment', 'admin.payment')->name('payment');
     Route::view('/review', 'admin.review')->name('review.overview');
 });
-
-// ============================
-// OPSIONAL: Tambahan route proteksi token khusus
-// (jika tidak mau digabung ke atas, bisa simpan sini)
-// ============================
-/*
-Route::middleware(['auth.user'])->group(function () {
-    Route::get('/game/{id}', [GameController::class, 'show']);
-    // Tambahkan route lain yang ingin dilindungi token di sini
-});
-*/

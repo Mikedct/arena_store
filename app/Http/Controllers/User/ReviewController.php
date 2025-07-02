@@ -10,7 +10,7 @@ class ReviewController extends Controller
 {
     public function index($id)
     {
-        $response = Http::get("http://localhost/game_store/review.php?gameID=$id");
+        $response = Http::get(env('API_BASE_URL') . "/review.php?gameID=$id");
 
         return $response->successful()
             ? response()->json($response->json())
@@ -19,30 +19,34 @@ class ReviewController extends Controller
 
     public function store(Request $request, $id)
     {
-        $token = session('jwt_token');
-        $userID = session('user_id');
-        $username = session('user');
+        $token    = session('jwt_token');
+        $userID   = session('user_id');
+        $username = session('username');
 
         if (!$token || !$userID || !$username) {
             return redirect('/user/login')->withErrors(['message' => 'Sesi login tidak valid.']);
         }
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token
-        ])->post("http://localhost/game_store/review.php", [
-            'userID' => $userID,
-            'username' => $username,
-            'gameID' => $id,
-            'title' => $request->input('title'),
-            'Text' => $request->input('text'),
-            'Rating' => $request->input('rating'),
-            'Date' => now()->toDateString()
+        $request->validate([
+            'title'  => 'required|string|max:255',
+            'text'   => 'required|string',
+            'rating' => 'required|numeric|min:1|max:5',
         ]);
 
-        if ($response->successful()) {
-            return back()->with('success', 'Review berhasil dikirim');
-        }
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token
+        ])->post(env('API_BASE_URL') . "/review.php", [
+            'userID'   => $userID,
+            'username' => $username,
+            'gameID'   => $id,
+            'title'    => $request->input('title'),
+            'Text'     => $request->input('text'),
+            'Rating'   => $request->input('rating'),
+            'Date'     => now()->toDateString()
+        ]);
 
-        return back()->with('error', 'Gagal mengirim review');
+        return $response->successful()
+            ? back()->with('success', 'Review berhasil dikirim.')
+            : back()->with('error', 'Gagal mengirim review.');
     }
 }

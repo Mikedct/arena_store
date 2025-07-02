@@ -3,71 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <title>Register User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {{-- Font modern --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #000000;
-            color: 	#4f9bd9;
-            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #4f9bd9;
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
+
         .register-container {
             background-color: #111;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px 	#4f9bd9;
-            width: 350px;
+            padding: 30px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #4f9bd9;
+            width: 100%;
+            max-width: 420px;
             max-height: 95vh;
             overflow-y: auto;
         }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
         input[type="text"],
         input[type="email"],
         input[type="date"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin-top: 6px;
-            margin-bottom: 12px;
-            border: 1px solid 	#4f9bd9;
-            background-color: #000000;
-            color: 	#4f9bd9;
-            border-radius: 4px;
+            margin-bottom: 16px;
+            border: 1px solid #4f9bd9;
+            background-color: #000;
+            color: #4f9bd9;
+            border-radius: 5px;
         }
+
         button {
             width: 100%;
-            padding: 10px;
-            background-color: 	#4f9bd9;
+            padding: 12px;
+            background-color: #4f9bd9;
             border: none;
-            color: #000000;
-            font-weight: bold;
+            color: #000;
+            font-weight: 600;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
+
+        button:hover {
+            background-color: #3680bb;
+        }
+
         a {
-            color: 	#4f9bd9;
-            text-decoration: underline;
-            display: inline-block;
-            margin-top: 12px;
+            color: #4f9bd9;
+            text-decoration: none;
+            display: block;
+            margin-top: 14px;
             text-align: center;
-            width: 100%;
-        }
-        .error {
-            color: red;
             font-size: 14px;
-            margin-bottom: 8px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #ff4c4c;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: #9fff9f;
+            font-size: 13px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="register-container">
-        <h2 class="text-xl mb-4">Register User</h2>
+        <h2>Register User</h2>
 
         {{-- Flash success --}}
         @if (session('success'))
-            <p class="text-green-400 mb-2">{{ session('success') }}</p>
+            <p class="success">{{ session('success') }}</p>
         @endif
 
         {{-- Error dari validasi --}}

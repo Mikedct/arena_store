@@ -16,7 +16,6 @@
         </button>
     </form>
 
-    {{-- Menampilkan Game --}}
     @if (!is_array($games) || count($games) === 0)
         <p class="text-center text-red-500 text-lg">Tidak ada data ditemukan.</p>
     @else
@@ -24,12 +23,15 @@
             $games = is_assoc($games) ? [$games] : $games;
         @endphp
 
+        <p class="text-center text-sm text-gray-600 mb-6">Ditemukan {{ count($games) }} game.</p>
+
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($games as $game)
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-lg transition duration-300">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
                     {{-- Gambar Game --}}
                     <div class="h-60 bg-gray-100">
-                        <img src="{{ !empty($game['image']) ? asset('images/games/' . $game['image']) : asset('images/games/default.png') }}"
+                        <img src="{{ asset('images/games/' . ($game['image'] ?? 'default.png')) }}"
+                             onerror="this.src='{{ asset('images/games/default.png') }}'"
                              alt="{{ $game['title'] }}"
                              class="w-full h-full object-cover object-center">
                     </div>
@@ -52,7 +54,8 @@
                         </ul>
 
                         <p class="mt-3 text-sm text-gray-600">
-                            <span class="font-medium">Deskripsi:</span> {{ \Illuminate\Support\Str::limit($game['description'], 120) }}
+                            <span class="font-medium">Deskripsi:</span>
+                            {{ \Illuminate\Support\Str::limit($game['description'], 120) }}
                         </p>
                     </div>
                 </div>

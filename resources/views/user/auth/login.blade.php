@@ -1,47 +1,133 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@section('title', 'Login User - Game Store')
+    {{-- Font modern --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-@section('content')
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center text-[#5b63b7] mb-6">Login Akun</h2>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-        {{-- Alert Success --}}
+        body {
+            background-color: #000;
+            color: #4f9bd9;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #111;
+            padding: 30px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #4f9bd9;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #4f9bd9;
+            background-color: #000;
+            color: #4f9bd9;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4f9bd9;
+            border: none;
+            color: #000;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3680bb;
+        }
+
+        a {
+            color: #4f9bd9;
+            text-decoration: none;
+            display: block;
+            margin-top: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #ff4c4c;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: #9fff9f;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login User</h2>
+
+        {{-- Flash success --}}
         @if(session('success'))
-            <x-alert type="success" :message="session('success')" />
+            <p class="success">{{ session('success') }}</p>
         @endif
 
-        {{-- Alert Error --}}
-        @if($errors->any())
-            <x-alert type="error" :message="$errors->first()" />
+        {{-- Error dari validasi --}}
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <p class="error">{{ $error }}</p>
+            @endforeach
         @endif
 
         <form method="POST" action="{{ route('user.login.submit') }}">
             @csrf
 
-            <div class="mb-4">
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username" value="{{ old('username') }}"
-                       class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#5b63b7]">
-            </div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" value="{{ old('username') }}" required>
 
-            <div class="mb-6">
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" name="password"
-                       class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#5b63b7]">
-            </div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
 
-            <button type="submit"
-                class="w-full bg-[#5b63b7] hover:bg-[#434a98] text-white font-bold py-2 px-4 rounded transition">
-                Login
-            </button>
-
-            <div class="mt-4 text-center text-sm">
-                Belum punya akun?
-                <a href="{{ route('user.register') }}" class="text-[#5b63b7] hover:underline">Daftar sekarang</a>
-            </div>
+            <button type="submit">Login</button>
         </form>
+
+        <a href="{{ route('user.register') }}">Belum punya akun? Daftar sekarang</a>
     </div>
-</div>
-@endsection
+</body>
+</html>

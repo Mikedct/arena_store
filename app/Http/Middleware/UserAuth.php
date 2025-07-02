@@ -11,7 +11,9 @@ class UserAuth
     public function handle(Request $request, Closure $next)
     {
         if (!Session::has('jwt_token')) {
-            return redirect('/user/login')->withErrors(['message' => 'Harap login terlebih dahulu']);
+            return redirect()->route('user.login')->withErrors([
+                'message' => 'Harap login terlebih dahulu'
+            ]);
         }
 
         return $next($request);
