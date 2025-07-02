@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\Payment;
 
 class DashboardController extends Controller
 {
@@ -14,13 +15,10 @@ class DashboardController extends Controller
         $user = session('user');
         $token = session('jwt_token');
         $games = [];
-
         if (!$token) {
             return redirect('/user/login')->withErrors(['message' => 'Harap login kembali']);
         }
-
         $baseUrl = env('API_BASE_URL', 'http://localhost/game_store') . "/game.php";
-
         try {
             if ($query) {
                 $responseTitle = Http::withHeaders(['Authorization' => "Bearer $token"])
@@ -29,7 +27,7 @@ class DashboardController extends Controller
                     ->get("$baseUrl?genre=$query");
                 $responsePlatform = Http::withHeaders(['Authorization' => "Bearer $token"])
                     ->get("$baseUrl?platform=$query");
-
+                
                 $allResults = array_merge(
                     $responseTitle->successful() ? $responseTitle->json() : [],
                     $responseGenre->successful() ? $responseGenre->json() : [],
@@ -70,4 +68,6 @@ class DashboardController extends Controller
 
         return abort(404, 'Game tidak ditemukan');
     }
+
+    
 }
