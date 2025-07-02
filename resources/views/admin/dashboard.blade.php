@@ -29,15 +29,13 @@
                         <p><strong>Harga:</strong> ${{ number_format($game['price'], 2) }}</p>
 
                         <div class="mt-3 flex gap-2">
-                            <a href="{{ url('/admin/game/' . $game['gameID']) }}"
-                               class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">Detail</a>
                             <a href="{{ url('/admin/game/edit/' . $game['gameID']) }}"
                                class="px-3 py-1 bg-yellow-400 text-black text-sm rounded hover:bg-yellow-500">Edit</a>
                             <form action="{{ url('/admin/game/delete/' . $game['gameID']) }}" method="POST"
                                   onsubmit="return confirm('Hapus game ini?')">
                                 @csrf @method('DELETE')
                                 <button type="submit"
-                                        class="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600">
+                                        class="px-3 py-1 bg-red-500 text-wdetailhite text-sm rounded hover:bg-red-600">
                                     Hapus
                                 </button>
                             </form>
