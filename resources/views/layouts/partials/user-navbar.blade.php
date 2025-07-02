@@ -14,12 +14,7 @@
                     Orders
                 </a>
             </li>
-            <!-- <li>
-                <a href="{{ route('user.payment') }}"
-                    class="{{ request()->routeIs('user.payment') ? 'underline font-semibold' : 'hover:underline' }}">
-                    Payment
-                </a>
-            </li> -->
+        
             @if (Session::has('user'))
                 @php $user = Session::get('user'); @endphp
                 <li>
