@@ -67,6 +67,7 @@ class AuthController extends Controller
 
         unset($validated['confirm_password']);
 
+        
         $response = Http::post('http://localhost/game_store/user.php', $validated);
 
         if ($response->successful()) {
