@@ -60,14 +60,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>Daftar Pembayaran</h2>
+        <h2>📋 Daftar Pembayaran User</h2>
 
-        @if (count($payments) > 0)
+        @if ($payments->count())
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>User</th>
+                        <th>Username</th>
                         <th>Game</th>
                         <th>Metode</th>
                         <th>Status</th>
@@ -78,17 +78,17 @@
                     @foreach ($payments as $index => $p)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $p->user->username ?? 'Unknown User' }}</td>
-                            <td>{{ $p->game->title ?? 'Unknown Game' }}</td>
+                            <td>{{ $p->user->username ?? 'User tidak ditemukan' }}</td>
+                            <td>{{ $p->game->title ?? 'Game tidak ditemukan' }}</td>
                             <td>{{ $p->paymentMethod }}</td>
                             <td>
-                                @if ($p->paymentStatus === 'paid')
+                                @if ($p->paymentStatus === 'Completed')
                                     <span class="status-paid">Lunas</span>
                                 @else
                                     <span class="status-pending">Pending</span>
                                 @endif
                             </td>
-                            <td>{{ $p->created_at->format('d M Y H:i') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($p->created_at)->format('d M Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
