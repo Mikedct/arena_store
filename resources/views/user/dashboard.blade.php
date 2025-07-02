@@ -25,18 +25,18 @@
 
         <p class="text-center text-sm text-gray-600 mb-6">Ditemukan {{ count($games) }} game.</p>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             @foreach ($games as $game)
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-xl transition duration-300 transform hover:scale-[1.02] w-fit mx-auto">
                     {{-- Gambar Game --}}
-                    <div class="h-120 bg-gray-100">
+                    <div style="text-align: center;">
                         <img src="{{ asset('images/games/' . ($game['image'] ?? 'default.png')) }}"
                              onerror="this.src='{{ asset('images/games/default.png') }}'"
                              alt="{{ $game['title'] }}"
-                             class="w-full h-full object-cover object-center">
+                             style="width: 300px; height: 400px; object-fit: cover; border-radius: 8px;">
                     </div>
 
-                    <div class="p-5">
+                    <div class="p-5 break-words">
                         <h2 class="text-lg font-bold text-[#000000] mb-2">
                             <a href="{{ url('/user/game/' . $game['gameID']) }}" class="text-[#5b63b7] hover:underline">
                                 {{ $game['title'] }}
