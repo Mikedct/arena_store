@@ -4,21 +4,18 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Session;
 
 class AdminAuth
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (!session()->has('admin')) {
-            return redirect('/admin/login')->withErrors(['message' => 'Silakan login sebagai admin.']);
+        // Periksa apakah admin sudah login
+        if (!Session::has('admin')) {
+            return redirect()->route('admin.login')->withErrors([
+                'message' => 'Harap login sebagai admin terlebih dahulu'
+            ]);
         }
-
         return $next($request);
     }
 }

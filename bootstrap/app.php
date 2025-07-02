@@ -11,23 +11,24 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-            // ✅ Middleware kustom
+        // ✅ Custom Middleware Aliases
         $middleware->alias([
+            'guest.user' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            'guest.admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
             'auth.user' => \App\Http\Middleware\UserAuth::class,
             'auth.admin' => \App\Http\Middleware\AdminAuth::class,
-
-
-            // ✅ Middleware Laravel penting jika ingin pakai
-            'guest'     => \App\Http\Middleware\RedirectIfAuthenticated::class,
-            'csrf'      => \App\Http\Middleware\VerifyCsrfToken::class,
-            'trim'      => \App\Http\Middleware\TrimString::class,
+            'csrf' => \App\Http\Middleware\VerifyCsrfToken::class,
+            'trim' => \App\Http\Middleware\TrimString::class,
         ]);
 
-        // Middleware global (opsional, jika ingin semua request pakai ini)
-        // $middleware->global([...]);
+
+        // ✅ Jika ingin menetapkan middleware global, aktifkan di sini:
+        // $middleware->global([
+        //     \App\Http\Middleware\ExampleGlobalMiddleware::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Di sini kamu bisa definisikan error handler custom (jika mau)
+        // ✅ Untuk custom error handler (optional)
         // $exceptions->renderable(...);
     })
     ->create();
