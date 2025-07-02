@@ -1,6 +1,6 @@
 <nav class="bg-[#5b63b7] text-white px-6 py-3 shadow-md">
     <div class="flex justify-between items-center flex-wrap">
-        <h1 class="text-xl font-bold mb-2 md:mb-0">Game Store</h1>
+        <h1 class="text-xl font-bold mb-2 md:mb-0">🎮 Game Store</h1>
         <ul class="flex flex-wrap gap-4 text-sm items-center">
             <li>
                 <a href="{{ route('user.dashboard') }}"

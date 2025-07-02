@@ -29,7 +29,7 @@
             @foreach ($games as $game)
                 <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
                     {{-- Gambar Game --}}
-                    <div class="h-60 bg-gray-100">
+                    <div class="h-120 bg-gray-100">
                         <img src="{{ asset('images/games/' . ($game['image'] ?? 'default.png')) }}"
                              onerror="this.src='{{ asset('images/games/default.png') }}'"
                              alt="{{ $game['title'] }}"

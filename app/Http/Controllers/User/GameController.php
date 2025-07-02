@@ -45,7 +45,7 @@ class GameController extends Controller
             $games = $response->successful() ? $response->json() : [];
         }
 
-        return view('dashboard_user', compact('games'));
+        return view('dashboard', compact('games'));
     }
 
     public function show($id)
@@ -61,7 +61,7 @@ class GameController extends Controller
 
         if ($response->successful() && !empty($response->json())) {
             $game = $response->json()[0];
-            return view('user.game-detail', compact('game'));
+            return view('user.game', compact('game'));
         }
 
         return abort(404, 'Game tidak ditemukan');
