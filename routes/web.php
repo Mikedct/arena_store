@@ -6,8 +6,9 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\GameController as UserGameController;
 use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\PaymentController as AdminPaymentController;
-use App\Http\Controllers\PaymentController as UserPaymentController;
+use App\Http\Controllers\User\PaymentController as AdminPaymentController;
+use App\Http\Controllers\User\PaymentController as UserPaymentController;
+use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
@@ -42,6 +43,9 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
     Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
     Route::get('/game/{id}/reviews', [ReviewController::class, 'index'])->name('review.index');
 
+    // Orders & Payment
+    Route::get('/payment-history', [OrderController::class, 'history'])->name('payment.history');
+    Route::post('/payment', [UserPaymentController::class, 'store'])->name('payment.store');
 
     // Akun Pribadi
     Route::get('/{id}', [UserController::class, 'show'])->name('show');
@@ -49,9 +53,9 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
     Route::put('/{id}', [UserController::class, 'update'])->name('update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
 
-    // Orders & Payment
-    Route::view('/orders', 'user.orders')->name('orders');
-    Route::post('/payment', [UserPaymentController::class, 'store'])->name('payment.store');
+    
+    
+
 
 });
 

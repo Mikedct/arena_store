@@ -9,9 +9,9 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('user.orders') }}"
-                    class="{{ request()->routeIs('user.orders') ? 'underline font-semibold' : 'hover:underline' }}">
-                    Orders
+                <a href="{{ route('user.payment.history') }}"
+                    class="{{ request()->routeIs('payment.history') ? 'underline font-semibold' : 'hover:underline' }}">
+                    Payment History
                 </a>
             </li>
         
