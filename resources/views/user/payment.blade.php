@@ -1,106 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ $game->title }} - Detail Game</title>
+    <title>Payment</title>
     <style>
         body {
             font-family: sans-serif;
             padding: 30px;
-            background-color: #f9f9f9;
+            background-color: #f3f4f6;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             background: white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 0 10px #ccc;
         }
-        iframe {
+        table {
             width: 100%;
-            height: 400px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 8px;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
-        .info p {
-            margin: 8px 0;
+        th, td {
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            text-align: left;
         }
-        .game-img {
-            display: block;
-            margin: 0 auto 20px;
-            max-width: 300px;
-            border-radius: 8px;
-            box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        th {
+            background-color: #5b63b7;
+            color: white;
+        }
+        .status-paid {
+            color: green;
+            font-weight: bold;
+        }
+        .status-pending {
+            color: orange;
+            font-weight: bold;
         }
         .back {
             display: inline-block;
             margin-top: 20px;
             text-decoration: none;
-            color: #333;
             background: #e0e0e0;
             padding: 10px 20px;
             border-radius: 6px;
-            font-weight: bold;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #218838;
-        }
-        .status-message {
-            margin-top: 10px;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>{{ $game->title }} ({{ $game->gameCode }})</h2>
+        <h2></h2>History Payments</h2>
 
-        <img src="{{ asset('images/games/' . ($game->image ?? 'default.png')) }}" class="game-img" alt="{{ $game->title }}">
-
-        <div class="info">
-            <p><strong>Genre:</strong> {{ $game->genre }}</p>
-            <p><strong>Platform:</strong> {{ $game->platform }}</p>
-            <p><strong>Price:</strong> ${{ $game->price }}</p>
-            <p><strong>Release Date:</strong> {{ $game->releaseDate }}</p>
-            <p><strong>Developer:</strong> {{ $game->developer }}</p>
-            <p><strong>Publisher:</strong> {{ $game->publisher }}</p>
-            <p><strong>Description:</strong> {{ $game->description }}</p>
-        </div>
-
-        @if (!empty($game->videolink))
-            <h3>🎬 Trailer</h3>
-            <iframe src="{{ $game->videolink }}" allowfullscreen></iframe>
+        @if(count($payments) > 0)
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Game</th>
+                        <th>Metode</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($payments as $index => $p)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $p->game->title ?? 'Tidak ditemukan' }}</td>
+                            <td>{{ $p->paymentMethod }}</td>
+                            <td>
+                                @if ($p->paymentStatus === 'paid')
+                                    <span class="status-paid">Lunas</span>
+                                @else
+                                    <span class="status-pending">Pending</span>
+                                @endif
+                            </td>
+                            <td>{{ $p->created_at->format('d M Y H:i') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>Tidak ada pembayaran yang ditemukan.</p>
         @endif
 
-        @if(session('success'))
-            <div class="status-message" style="color: green;">{{ session('success') }}</div>
-        @elseif(session('error'))
-            <div class="status-message" style="color: red;">{{ session('error') }}</div>
-        @endif
-
-        <form action="{{ route('payment.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="game_id" value="{{ $game->gameID }}">
-            <label for="paymentMethod">Metode Pembayaran:</label>
-            <select name="paymentMethod" id="paymentMethod" required>
-                <option value="Gopay">Gopay</option>
-                <option value="Visa">Visa</option>
-                <option value="OVO">OVO</option>
-            </select>
-            <button type="submit">Bayar Sekarang</button>
-        </form>
-
-        <a class="back" href="{{ route('user.dashboard') }}">← Kembali ke Dashboard</a>
+        <a href="{{ route('user.dashboard') }}" class="back">← Kembali ke Dashboard</a>
     </div>
 </body>
 </html>
