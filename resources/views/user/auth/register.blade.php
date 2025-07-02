@@ -144,7 +144,7 @@
             <input type="password" name="password" required>
 
             <label>Confirm Password</label>
-            <input type="password" name="password_confirmation" required>
+            <input type="password" name="confirm_password" required>
 
             <button type="submit">Register</button>
         </form>
