@@ -30,10 +30,14 @@
             @endif
 
             <li>
-                <form method="POST" action="{{ route('user.logout') }}">
+                <form id="logout-form" method="POST" action="{{ route('user.logout') }}" style="display: none;">
                     @csrf
-                    <button type="submit" class="hover:underline text-sm">Logout</button>
                 </form>
+
+                <a href="#" class="hover:underline text-sm"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                </a>
             </li>
         </ul>
     </div>
