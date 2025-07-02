@@ -55,17 +55,17 @@
         button:hover {
             background: #218838;
         }
+        .status-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>{{ $game->title }} ({{ $game->gameCode }})</h2>
 
-        @if (!empty($game->image))
-            <img src="{{ asset('images/games/' . $game->image) }}" class="game-img" alt="{{ $game->title }}">
-        @else
-            <img src="{{ asset('images/games/default.png') }}" class="game-img" alt="Default Image">
-        @endif
+        <img src="{{ asset('images/games/' . ($game->image ?? 'default.png')) }}" class="game-img" alt="{{ $game->title }}">
 
         <div class="info">
             <p><strong>Genre:</strong> {{ $game->genre }}</p>
@@ -82,21 +82,25 @@
             <iframe src="{{ $game->videolink }}" allowfullscreen></iframe>
         @endif
 
+        @if(session('success'))
+            <div class="status-message" style="color: green;">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="status-message" style="color: red;">{{ session('error') }}</div>
+        @endif
+
         <form action="{{ route('payment.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="game_id" value="{{ $game->id }}">
-
+            <input type="hidden" name="game_id" value="{{ $game->gameID }}">
             <label for="paymentMethod">Metode Pembayaran:</label>
             <select name="paymentMethod" id="paymentMethod" required>
                 <option value="Gopay">Gopay</option>
                 <option value="Visa">Visa</option>
                 <option value="OVO">OVO</option>
             </select>
-
             <button type="submit">Bayar Sekarang</button>
         </form>
 
-        <a class="back" href="{{ url('/user/dashboard') }}">← Kembali ke Dashboard</a>
+        <a class="back" href="{{ route('user.dashboard') }}">← Kembali ke Dashboard</a>
     </div>
 </body>
 </html>
