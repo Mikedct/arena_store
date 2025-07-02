@@ -26,6 +26,13 @@
                    Review
                 </a>
             </li>
+            <li>
+                <form method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button type="submit" class="hover:underline text-sm">Logout</button>
+                </form>
+            </li>
+            
         </ul>
     </div>
 </nav>
