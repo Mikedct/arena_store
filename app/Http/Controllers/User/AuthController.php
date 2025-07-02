@@ -30,7 +30,10 @@ class AuthController extends Controller
 
         if ($response->successful() && isset($data['token'])) {
             Session::put('jwt_token', $data['token']);
-            Session::put('user', $data['userID'] ?? $credentials['username']); // Save ID or username
+            Session::put('user', [
+                'userID' => $data['userID'],
+                'username' => $credentials['username']
+            ]);
             return redirect()->route('user.dashboard')->with('success', 'Login berhasil!');
         }
 
@@ -52,14 +55,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'firstName'         => 'required|string|max:255',
-            'lastName'          => 'required|string|max:255',
-            'username'          => 'required|string|max:255',
-            'email'             => 'required|email',
-            'dateOfBirth'       => 'required|date',
-            'phoneNumber'       => 'required|string',
-            'password'          => 'required|string|min:6|same:confirm_password',
-            'confirm_password'  => 'required|string|min:6',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => 'required|email',
+            'dateOfBirth' => 'required|date',
+            'phoneNumber' => 'required|string',
+            'password' => 'required|string|min:6|same:confirm_password',
+            'confirm_password' => 'required|string|min:6',
         ]);
 
         unset($validated['confirm_password']);

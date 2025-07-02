@@ -45,7 +45,7 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
     Route::get('/{id}', [UserController::class, 'show'])->name('show');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
     Route::put('/{id}', [UserController::class, 'update'])->name('update');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
 
     // Orders & Payment
     Route::view('/orders', 'user.orders')->name('orders');
