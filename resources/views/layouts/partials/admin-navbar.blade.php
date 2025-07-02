@@ -20,12 +20,6 @@
                    Payment
                 </a>
             </li>
-            <li>
-                <a href="{{ route('admin.review.overview') }}"
-                   class="{{ request()->routeIs('admin.review.overview') ? 'underline font-semibold' : 'hover:underline' }}">
-                   Review
-                </a>
-            </li>
         </ul>
     </div>
 </nav>
