@@ -38,6 +38,8 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/game/{id}', [UserGameController::class, 'show'])->name('game.show');
     Route::post('/game/{id}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/game/{id}/reviews', [ReviewController::class, 'index'])->name('review.index');
+
 
     // Akun Pribadi
     Route::get('/{id}', [UserController::class, 'show'])->name('show');

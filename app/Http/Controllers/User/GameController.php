@@ -50,18 +50,25 @@ class GameController extends Controller
 
     public function show($id)
     {
-        $token = Session::get('jwt_token'); // pastikan token sudah disimpan saat login
+        $token = Session::get('jwt_token');
+
         if (!$token) {
             return redirect('/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
         }
 
-        $response = Http::withHeaders([
+        // Ambil detail game
+        $gameResponse = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token
         ])->get("http://localhost/game_store/game.php?gameID=$id");
 
-        if ($response->successful() && !empty($response->json())) {
-            $game = $response->json()[0];
-            return view('user.game', compact('game'));
+        // Ambil review untuk game ini
+        $reviewResponse = Http::get("http://localhost/game_store/review.php?gameID=$id");
+
+        if ($gameResponse->successful() && !empty($gameResponse->json())) {
+            $game = $gameResponse->json()[0];
+            $reviews = $reviewResponse->successful() ? $reviewResponse->json() : [];
+
+            return view('user.game', compact('game', 'reviews'));
         }
 
         return abort(404, 'Game tidak ditemukan');
