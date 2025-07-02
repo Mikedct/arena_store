@@ -11,11 +11,12 @@ class AdminAuth
     public function handle(Request $request, Closure $next)
     {
         // Periksa apakah admin sudah login
-        if (!Session::has('admin')) {
+        if (!Session::has('admin_id') || !Session::has('jwt_token')) {
             return redirect()->route('admin.login')->withErrors([
                 'message' => 'Harap login sebagai admin terlebih dahulu'
             ]);
         }
+
         return $next($request);
     }
 }

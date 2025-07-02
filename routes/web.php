@@ -69,7 +69,7 @@ Route::post('/admin/logout', function () {
 // ADMIN ROUTES
 // ============================
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     // Game Management
     Route::get('/game/{id}', [AdminGameController::class, 'show'])->name('game.show');
     Route::get('/game/edit/{id}', [AdminGameController::class, 'edit'])->name('game.edit');

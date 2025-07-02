@@ -21,32 +21,32 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $response = Http::get('http://localhost/game_store/admin.php');
+        // Login dan ambil token dari endpoint login_admin.php
+        $response = Http::post('http://localhost/game_store/login_admin.php', [
+            'username' => $credentials['username'],
+            'password' => $credentials['password'],
+        ]);
 
-        if (!$response->successful()) {
-            return back()->withErrors(['message' => 'Gagal terhubung ke server.']);
+        $data = $response->json();
+
+        if (!$response->successful() || !isset($data['token'])) {
+            return back()->withErrors([
+                'message' => $data['message'] ?? 'Login gagal. Cek username dan password.'
+            ]);
         }
 
-        $admins = $response->json();
+        // Simpan data admin ke session
+        Session::put('jwt_token', $data['token']);
+        Session::put('admin_token', $data['token']);
+        Session::put('admin_id', $data['adminID'] ?? null);
+        Session::put('admin_username', $data['username'] ?? $credentials['username']);
 
-        // Cek kredensial dengan md5
-        $admin = collect($admins)->first(function ($a) use ($credentials) {
-            return $a['username'] === $credentials['username'] &&
-                   $a['password'] === md5($credentials['password']);
-        });
-
-        if (!$admin) {
-            return back()->withErrors(['message' => 'Username atau password salah.']);
-        }
-
-        Session::put('admin', $admin);
-
-        return redirect('/admin/dashboard')->with('success', 'Login berhasil!');
+        return redirect()->route('admin.dashboard')->with('success', 'Login berhasil!');
     }
 
     public function logout()
     {
-        Session::forget('admin');
+        Session::forget(['jwt_token', 'admin_token', 'admin_id', 'admin_username']);
         return redirect()->route('admin.login')->with('success', 'Logout berhasil.');
     }
 }

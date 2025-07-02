@@ -9,12 +9,6 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.games') }}"
-                   class="{{ request()->routeIs('admin.games') ? 'underline font-semibold' : 'hover:underline' }}">
-                   Games
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('admin.orders') }}"
                    class="{{ request()->routeIs('admin.orders') ? 'underline font-semibold' : 'hover:underline' }}">
                    Orders

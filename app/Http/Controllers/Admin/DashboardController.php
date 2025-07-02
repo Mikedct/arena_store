@@ -10,10 +10,12 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $token = Session::get('jwt_token');
+        $token = Session::get('admin_token'); // GUNAKAN session token admin
 
         if (!$token) {
-            return redirect('admin/login')->withErrors(['message' => 'Token tidak ditemukan. Harap login kembali.']);
+            return redirect()->route('admin.login')->withErrors([
+                'message' => 'Token tidak ditemukan. Harap login kembali.'
+            ]);
         }
 
         $response = Http::withHeaders([
@@ -21,10 +23,12 @@ class DashboardController extends Controller
         ])->get('http://localhost/game_store/game.php');
 
         if ($response->successful()) {
-            $games = $response->json(); // ubah nama variabel ke jamak agar lebih konsisten
+            $games = $response->json();
             return view('admin.dashboard', compact('games'));
         }
 
-        return view('admin.dashboard')->with('error', 'Gagal mengambil data game.');
+        return view('admin.dashboard')->with([
+            'message' => 'Gagal mengambil data game.'
+        ]);
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
 
@@ -11,13 +11,13 @@
         + Tambah Game
     </a>
 
-    @if (!is_array($game) || count($game) === 0)
+    @if (!is_array($games) || count($games) === 0)
         <p class="text-center text-red-500 text-lg">Tidak ada data game.</p>
     @else
-        @php $game = is_assoc($game) ? [$game] : $game; @endphp
+        @php $games = is_assoc($games) ? [$games] : $games; @endphp
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach ($game as $game)
+            @foreach ($games as $game)
                 <div class="bg-white border shadow rounded-xl overflow-hidden">
                     <img src="{{ asset('images/games/' . ($game['image'] ?? 'default.png')) }}"
                          class="w-full h-40 object-cover">
