@@ -45,7 +45,7 @@ class GameController extends Controller
             $games = $response->successful() ? $response->json() : [];
         }
 
-        return view('dashboard_user', compact('games'));
+        return view('dashboard', compact('games'));
     }
 
     public function show($id)
