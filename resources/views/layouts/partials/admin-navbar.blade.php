@@ -20,6 +20,19 @@
                    Payment
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.review.overview') }}"
+                   class="{{ request()->routeIs('admin.review.overview') ? 'underline font-semibold' : 'hover:underline' }}">
+                   Review
+                </a>
+            </li>
+            <li>
+                <form method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button type="submit" class="hover:underline text-sm">Logout</button>
+                </form>
+            </li>
+            
         </ul>
     </div>
 </nav>

@@ -76,7 +76,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/game/delete/{id}', [AdminGameController::class, 'destroy'])->name('game.delete');
 
     // Review Management
-    Route::get('/review/edit/{id}', [AdminReviewController::class, 'edit'])->name('review.edit');
+    Route::put('/review/edit/{id}', [AdminReviewController::class, 'edit'])->name('review.edit');
     Route::put('/review/update/{id}', [AdminReviewController::class, 'update'])->name('review.update');
     Route::delete('/review/delete/{id}', [AdminReviewController::class, 'destroy'])->name('review.delete');
 

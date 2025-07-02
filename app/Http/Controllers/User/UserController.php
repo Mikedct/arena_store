@@ -65,25 +65,38 @@ class UserController extends Controller
         }
 
         $validated = $request->validate([
-            'firstName'    => 'required|string|max:255',
-            'lastName'     => 'required|string|max:255',
-            'username'     => 'required|string|max:255',
-            'email'        => 'required|email|max:255',
-            'phoneNumber'  => 'required|string|max:20',
-            'dateOfBirth'  => 'required|date',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phoneNumber' => 'required|string|max:20',
+            'dateOfBirth' => 'required|date',
         ]);
 
         $payload = array_merge($validated, ['userID' => (int) $id]);
 
         $response = Http::withHeaders([
-            'Accept'        => 'application/json',
-            'Content-Type'  => 'application/json',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $token
         ])->put($this->apiUrl, $payload);
 
         if ($response->successful()) {
+            // Ambil user yang baru diupdate dari API
+            $getUser = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])->get("{$this->apiUrl}?userID=$id");
+
+            if ($getUser->successful() && !empty($getUser->json())) {
+                $updatedUser = $getUser->json()[0];
+
+                // Simpan ulang ke session
+                Session::put('user', $updatedUser);
+            }
+
             return redirect()->route('user.dashboard')->with('success', 'Akun berhasil diperbarui.');
         }
+
 
         return back()->withErrors(['message' => 'Gagal memperbarui akun.']);
     }
@@ -97,12 +110,12 @@ class UserController extends Controller
         }
 
         $response = Http::withHeaders([
-            'Accept'        => 'application/json',
-            'Content-Type'  => 'application/json',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $token
         ])->send('DELETE', $this->apiUrl, [
-            'json' => ['userID' => (int) $id],
-        ]);
+                    'json' => ['userID' => (int) $id],
+                ]);
 
         if ($response->successful()) {
             Session::forget('jwt_token');
