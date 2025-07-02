@@ -10,7 +10,6 @@ class UserPaymentController extends Controller
 {
     public function index()
     {
-        // Misalnya ambil payment berdasarkan user login
         $user = session('user');
         $payments = Payment::with('game')
             ->where('user_id', $user['userID'] ?? null)
