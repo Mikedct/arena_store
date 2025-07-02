@@ -57,7 +57,6 @@
 <div class="mt-10 max-w-4xl mx-auto bg-gray-50 p-6 rounded-lg border border-gray-200">
     <h3 class="text-xl font-semibold mb-4 text-[#5b63b7]">Tulis Review</h3>
 
-    {{-- Feedback pesan --}}
     @if(session('success'))
         <p class="text-green-600 mb-4">{{ session('success') }}</p>
     @elseif(session('error'))
@@ -66,6 +65,9 @@
 
     <form action="{{ route('user.review.store', $game['gameID']) }}" method="POST" class="space-y-4">
         @csrf
+
+        {{-- Hidden Title --}}
+        <input type="hidden" name="title" value="{{ $game['title'] }}">
 
         {{-- Text Review --}}
         <div>
@@ -86,7 +88,6 @@
             @error('rating') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
 
-        {{-- Tombol Submit --}}
         <button type="submit" class="bg-[#5b63b7] text-white px-4 py-2 rounded hover:bg-[#434bac]">
             Kirim Review
         </button>
@@ -122,15 +123,12 @@
         <p class="text-gray-500">Belum ada review.</p>
     @endif
 </div>
-
 @endsection
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const stars = document.querySelectorAll('#star-container span');
         const ratingInput = document.getElementById('rating');
-
-        // Jika ada nilai rating lama (misal dari old value)
         const oldValue = parseInt(ratingInput.value || 0);
         highlightStars(oldValue);
 
