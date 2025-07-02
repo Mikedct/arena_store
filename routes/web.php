@@ -7,6 +7,7 @@ use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\GameController as UserGameController;
 use App\Http\Controllers\User\UserController;
 
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
@@ -53,9 +54,22 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
 });
 
 // ============================
+// AUTH ROUTES (USER)
+// ============================
+Route::view('/admin/login', 'admin.auth.login')->name('admin.login');
+
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+
+Route::post('/admin/logout', function () {
+    session()->flush();
+    return redirect()->route('admin.login')->with('success', 'Logout berhasil');
+})->name('admin.logout');
+
+// ============================
 // ADMIN ROUTES
 // ============================
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
     // Game Management
     Route::get('/game/{id}', [AdminGameController::class, 'show'])->name('game.show');
     Route::get('/game/edit/{id}', [AdminGameController::class, 'edit'])->name('game.edit');

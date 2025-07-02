@@ -2,46 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{-- Font modern --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #000000;
-            color: #4f9bd9;
-            font-family: Arial, sans-serif;
+            background-color: #5b63b7;
+            color: #5b63b7;
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
+
         .login-container {
-            background-color: #111;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #4f9bd9;
-            width: 300px;
+            background-color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #5b63b7;
+            width: 100%;
+            max-width: 400px;
         }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #4f9bd9;
-            background-color: #000;
-            color: #4f9bd9;
+            margin-bottom: 16px;
+            border: 1px solid #5b63b7;
+            background-color: #ffffff;
+            color: #5b63b7;
+            border-radius: 5px;
         }
+
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #4f9bd9;
+            padding: 12px;
+            background-color: #5b63b7;
             border: none;
-            color: #000;
-            font-weight: bold;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
+        button:hover {
+            background-color: #3680bb;
+        }
+
         a {
-            color: #4f9bd9;
+            color: #5b63b7;
+            text-decoration: none;
+            display: block;
+            margin-top: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        a:hover {
             text-decoration: underline;
+        }
+
+        .error {
+            color: #ff4c4c;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: #9fff9f;
+            font-size: 13px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -49,17 +103,26 @@
     <div class="login-container">
         <h2>Login Admin</h2>
 
-        @if ($errors->has('login'))
-            <p style="color: red;">{{ $errors->first('login') }}</p>
+        {{-- Flash success --}}
+        @if(session('success'))
+            <p class="success">{{ session('success') }}</p>
         @endif
 
-        <form method="POST" action="{{ url('/login') }}">
-            @csrf
-            <label>Username:</label>
-            <input type="text" name="username" required>
+        {{-- Error dari validasi --}}
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <p class="error">{{ $error }}</p>
+            @endforeach
+        @endif
 
-            <label>Password:</label>
-            <input type="password" name="password" required>
+        <form method="POST" action="{{ route('admin.login.submit') }}">
+            @csrf
+
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" value="{{ old('username') }}" required>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
 
             <button type="submit">Login</button>
         </form>

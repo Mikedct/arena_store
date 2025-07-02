@@ -14,8 +14,8 @@
         }
 
         body {
-            background-color: #000;
-            color: #4f9bd9;
+            background-color: #5b63b7;
+            color: #5b63b7;
             font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
@@ -25,10 +25,10 @@
         }
 
         .register-container {
-            background-color: #111;
+            background-color: #ffffff;
             padding: 30px 25px;
             border-radius: 10px;
-            box-shadow: 0 0 20px #4f9bd9;
+            box-shadow: 0 0 20px #5b63b7;
             width: 100%;
             max-width: 420px;
             max-height: 95vh;
@@ -55,18 +55,18 @@
             width: 100%;
             padding: 10px;
             margin-bottom: 16px;
-            border: 1px solid #4f9bd9;
-            background-color: #000;
-            color: #4f9bd9;
+            border: 1px solid #5b63b7;
+            background-color: #ffffff;
+            color: #5b63b7;
             border-radius: 5px;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: #4f9bd9;
+            background-color: #5b63b7;
             border: none;
-            color: #000;
+            color: #ffffff;
             font-weight: 600;
             border-radius: 5px;
             cursor: pointer;
@@ -78,7 +78,7 @@
         }
 
         a {
-            color: #4f9bd9;
+            color: #5b63b7;
             text-decoration: none;
             display: block;
             margin-top: 14px;
