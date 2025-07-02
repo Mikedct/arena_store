@@ -18,16 +18,16 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'userID');
+        return $this->belongsTo(User::class, 'userID', 'id');
     }
 
     public function game()
     {
-        return $this->belongsTo(Game::class, 'gameID');
+        return $this->belongsTo(Game::class, 'gameID', 'gameID');
     }
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class, 'paymentID');
+        return $this->belongsTo(Payment::class, 'paymentID', 'paymentID');
     }
 }
