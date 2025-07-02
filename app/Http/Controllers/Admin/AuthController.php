@@ -22,7 +22,7 @@ class AuthController extends Controller
         ]);
 
         // Login dan ambil token dari endpoint login_admin.php
-        $response = Http::post('http://localhost/game_store/login_admin.php', [
+        $response = Http::post('http://localhost/game_store/login.php', [
             'username' => $credentials['username'],
             'password' => $credentials['password'],
         ]);
