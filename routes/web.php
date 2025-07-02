@@ -7,6 +7,7 @@ use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\GameController as UserGameController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\PaymentController as AdminPaymentController;
+use App\Http\Controllers\PaymentController as UserPaymentController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
@@ -50,7 +51,7 @@ Route::prefix('user')->name('user.')->middleware('auth.user')->group(function ()
 
     // Orders & Payment
     Route::view('/orders', 'user.orders')->name('orders');
-    Route::post('/payment', [AdminPaymentController::class, 'store'])->name('payment.store');
+    Route::post('/payment', [UserPaymentController::class, 'store'])->name('payment.store');
 
 });
 
